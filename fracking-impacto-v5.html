@@ -1,0 +1,1878 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="description" content="Fracking — Análisis de impacto ambiental global 2024. Vanguardia IA Lab">
+<meta property="og:title" content="Extracción con Fracking — Impacto Ambiental Global">
+<meta property="og:description" content="Análisis visual del impacto ambiental del fracking: agua, suelo, clima, sismicidad. México en detalle. Vanguardia IA Lab.">
+<meta property="og:type" content="article">
+<title>Extracción con Fracking — Vanguardia IA Lab</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;500;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap');
+
+/* ══════════════ DESIGN TOKENS ══════════════ */
+:root{
+  --black:#08090c;
+  --dark:#0e1016;
+  --panel:#13161f;
+  --panel2:#181c27;
+  --border:#252a38;
+  --border2:#1e2230;
+  --accent:#e8441a;
+  --amber:#f5a623;
+  --teal:#1ecfb4;
+  --blue:#4a9eff;
+  --purple:#9b5cf6;
+  --green:#22c55e;
+  --text:#c8cdd8;
+  --muted:#6b728a;
+  --white:#eef0f6;
+  --radius:6px;
+  --gap:2px;
+  --section-pad:clamp(48px,8vw,100px) clamp(16px,5vw,40px);
+}
+
+/* ══════════════ RESET & BASE ══════════════ */
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  background:var(--black);
+  color:var(--text);
+  font-family:'Syne',sans-serif;
+  overflow-x:hidden;
+  line-height:1.6;
+}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+img{max-width:100%;height:auto}
+
+/* ══════════════ PROGRESS BAR ══════════════ */
+#progress{
+  position:fixed;top:0;left:0;height:3px;width:0%;z-index:9900;
+  background:linear-gradient(90deg,var(--accent),var(--amber));
+  transition:width .1s;
+}
+
+/* ══════════════ NAV ══════════════ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:9000;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 clamp(16px,4vw,40px);
+  height:52px;
+  background:rgba(8,9,12,.92);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border2);
+  transition:transform .3s;
+}
+nav.hidden{transform:translateY(-100%)}
+.nav-brand{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:18px;letter-spacing:3px;color:var(--accent);
+  white-space:nowrap;
+}
+.nav-links{
+  display:flex;gap:clamp(16px,3vw,32px);
+  list-style:none;align-items:center;
+}
+.nav-links a{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);transition:color .2s;
+  white-space:nowrap;
+}
+.nav-links a:hover{color:var(--accent);text-decoration:none}
+.nav-share{
+  background:rgba(232,68,26,.15);
+  border:1px solid rgba(232,68,26,.3);
+  color:var(--accent)!important;
+  padding:5px 12px;border-radius:3px;
+  cursor:pointer;
+  transition:background .2s;
+}
+.nav-share:hover{background:rgba(232,68,26,.3)!important;text-decoration:none!important}
+@media(max-width:600px){
+  .nav-links li:not(:last-child){display:none}
+}
+
+/* ══════════════ HERO ══════════════ */
+.hero{
+  min-height:100svh;
+  display:flex;flex-direction:column;
+  justify-content:center;align-items:center;
+  text-align:center;
+  padding:80px clamp(16px,5vw,48px) 60px;
+  position:relative;overflow:hidden;
+}
+
+/* crack texture via SVG filter */
+.hero-texture{
+  position:absolute;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size:300px 300px;
+  opacity:.5;pointer-events:none;
+}
+
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.012) 1px,transparent 1px);
+  background-size:50px 50px;
+  pointer-events:none;
+}
+
+.hero-glow{
+  position:absolute;width:min(800px,120vw);height:min(800px,120vw);
+  background:radial-gradient(circle,rgba(232,68,26,.12) 0%,transparent 65%);
+  border-radius:50%;
+  animation:glowPulse 7s ease-in-out infinite alternate;
+  pointer-events:none;
+}
+@keyframes glowPulse{
+  from{transform:scale(1) translate(-20px,-20px)}
+  to{transform:scale(1.2) translate(20px,20px)}
+}
+
+/* crack lines overlay */
+.hero-cracks{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(143deg,transparent 48%,rgba(232,68,26,.04) 49%,rgba(232,68,26,.06) 50%,transparent 51%),
+    linear-gradient(67deg,transparent 47%,rgba(232,68,26,.03) 48.5%,transparent 49.5%),
+    linear-gradient(112deg,transparent 52%,rgba(232,68,26,.03) 53%,transparent 54%);
+  pointer-events:none;
+}
+
+.hero-eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:clamp(9px,2vw,11px);letter-spacing:4px;
+  color:var(--muted);text-transform:uppercase;
+  margin-bottom:clamp(16px,3vh,28px);
+  position:relative;z-index:1;
+  opacity:0;animation:slideUp .7s .2s forwards;
+}
+
+/* Crack texture on FRACKING text via clip & mask */
+.hero-title-wrap{
+  position:relative;z-index:1;
+  opacity:0;animation:slideUp .8s .35s forwards;
+}
+
+.hero-sub-text{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(18px,4vw,28px);
+  letter-spacing:clamp(4px,1vw,12px);
+  color:var(--muted);
+  display:block;
+  margin-bottom:0;
+}
+
+.hero-main-word{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(72px,18vw,200px);
+  line-height:.85;
+  letter-spacing:clamp(2px,1vw,6px);
+  color:var(--white);
+  display:block;
+  position:relative;
+}
+
+/* FRACK white, ING outlined with crack texture */
+.word-frack{color:var(--white);}
+.word-ing{
+  color:transparent;
+  -webkit-text-stroke:2px var(--accent);
+  position:relative;
+}
+/* crack lines on ING via pseudo */
+.word-ing::after{
+  content:'ING';
+  position:absolute;left:0;top:0;
+  color:transparent;
+  -webkit-text-stroke:0px transparent;
+  background:
+    repeating-linear-gradient(143deg,
+      transparent 0px,transparent 8px,
+      rgba(232,68,26,.35) 8px,rgba(232,68,26,.35) 9px),
+    repeating-linear-gradient(67deg,
+      transparent 0px,transparent 14px,
+      rgba(232,68,26,.2) 14px,rgba(232,68,26,.2) 15px);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  font-size:inherit;font-family:inherit;letter-spacing:inherit;
+}
+
+.hero-byline{
+  font-family:'JetBrains Mono',monospace;
+  font-size:clamp(9px,2vw,12px);
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--accent);
+  margin-top:clamp(8px,2vh,16px);
+  display:block;
+  opacity:.8;
+}
+
+.hero-tagline{
+  font-size:clamp(13px,2.5vw,16px);color:var(--muted);
+  max-width:560px;margin-top:clamp(20px,4vh,36px);
+  line-height:1.75;position:relative;z-index:1;
+  opacity:0;animation:slideUp .7s .55s forwards;
+}
+
+.hero-kpis{
+  display:flex;flex-wrap:wrap;gap:clamp(20px,4vw,48px);
+  justify-content:center;
+  margin-top:clamp(24px,5vh,52px);
+  position:relative;z-index:1;
+  opacity:0;animation:slideUp .7s .75s forwards;
+}
+.kpi-num{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(36px,7vw,54px);
+  line-height:1;display:block;
+}
+.kpi-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:clamp(8px,1.5vw,10px);letter-spacing:2px;
+  color:var(--muted);text-transform:uppercase;margin-top:4px;
+}
+
+.scroll-cue{
+  position:absolute;bottom:28px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  opacity:0;animation:fadeIn 1s 1.4s forwards;
+}
+.scroll-cue-text{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:4px;color:var(--muted);text-transform:uppercase;
+}
+.scroll-cue-line{
+  width:1px;height:40px;
+  background:linear-gradient(to bottom,var(--accent),transparent);
+  animation:lineGrow 2s ease-in-out infinite;
+}
+@keyframes lineGrow{
+  0%,100%{transform:scaleY(0);transform-origin:top}
+  50%{transform:scaleY(1);transform-origin:top}
+}
+
+@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* ══════════════ SECTION LAYOUT ══════════════ */
+.section{padding:var(--section-pad);max-width:1160px;margin:0 auto;}
+.section-eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:5px;color:var(--accent);
+  text-transform:uppercase;margin-bottom:14px;
+  display:flex;align-items:center;gap:10px;
+}
+.section-eyebrow::before{content:'';width:20px;height:1px;background:var(--accent);}
+.section-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(40px,7vw,76px);
+  line-height:.95;color:var(--white);
+  margin-bottom:12px;
+}
+.section-sub{
+  font-size:clamp(13px,2vw,15px);color:var(--muted);
+  max-width:620px;line-height:1.8;
+  margin-bottom:clamp(32px,5vh,56px);font-weight:400;
+}
+
+/* ══════════════ REVEAL ANIMATION ══════════════ */
+.reveal{opacity:0;transform:translateY(36px);transition:opacity .75s cubic-bezier(.22,1,.36,1),transform .75s cubic-bezier(.22,1,.36,1);}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.rd1{transition-delay:.05s}.rd2{transition-delay:.12s}.rd3{transition-delay:.2s}
+.rd4{transition-delay:.28s}.rd5{transition-delay:.36s}
+
+/* ══════════════ DIAGRAM ══════════════ */
+.diagram-wrap{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;margin-bottom:clamp(40px,6vh,80px);
+}
+.diagram-wrap svg{width:100%;height:auto;display:block;}
+
+/* ══════════════ IMPACT CARDS ══════════════ */
+.impact-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));
+  gap:var(--gap);
+  background:var(--border2);border:1px solid var(--border2);
+  border-radius:var(--radius);overflow:hidden;
+  margin-bottom:clamp(40px,6vh,80px);
+}
+.impact-card{
+  background:var(--panel);padding:clamp(20px,3vw,30px);
+  position:relative;overflow:hidden;
+  transition:background .2s;
+}
+.impact-card::before{
+  content:'';position:absolute;top:0;left:0;
+  width:3px;height:100%;
+  background:var(--c,var(--accent));
+}
+.impact-card:hover{background:var(--panel2);}
+.ic-icon{font-size:32px;margin-bottom:14px;display:block;}
+.ic-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(20px,3vw,24px);color:var(--white);
+  letter-spacing:.5px;margin-bottom:8px;
+}
+.ic-body{font-size:clamp(12px,2vw,13.5px);color:var(--muted);line-height:1.7;}
+.ic-stat{margin-top:16px;display:flex;align-items:baseline;gap:6px;}
+.ic-num{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(32px,5vw,44px);line-height:1;
+  color:var(--c,var(--accent));
+}
+.ic-unit{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;}
+
+/* ══════════════ CHART WRAPPER ══════════════ */
+.chart-wrap{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:var(--radius);padding:clamp(24px,4vw,40px);
+  margin-bottom:clamp(40px,6vh,80px);
+}
+.chart-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(22px,4vw,28px);color:var(--white);
+  letter-spacing:.5px;margin-bottom:6px;
+}
+.chart-sub{font-size:clamp(11px,2vw,13px);color:var(--muted);margin-bottom:clamp(20px,3vh,32px);line-height:1.6;}
+
+/* ══════════════ ANIMATED BAR CHART ══════════════ */
+.bar-row{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:12px;
+  padding:6px 8px;border-radius:4px;
+  transition:background .2s;position:relative;
+  cursor:default;
+}
+.bar-row:hover{background:var(--panel2);}
+.bar-lbl{
+  width:clamp(110px,20vw,155px);min-width:0;
+  font-size:clamp(10px,2vw,12px);color:var(--text);
+  font-weight:500;text-align:right;flex-shrink:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.bar-track{
+  flex:1;height:28px;
+  background:var(--dark);border-radius:3px;
+  position:relative;overflow:hidden;
+  min-width:0;
+}
+.bar-fill{
+  height:100%;border-radius:3px;
+  display:flex;align-items:center;padding-left:10px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;font-weight:500;color:#000;
+  min-width:32px;width:0;
+  transition:width 1.5s cubic-bezier(.23,1,.32,1);
+  white-space:nowrap;overflow:hidden;
+}
+.bar-tip-label{
+  position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  color:var(--muted);opacity:0;white-space:nowrap;
+  pointer-events:none;transition:opacity .2s;
+}
+.bar-row:hover .bar-tip-label{opacity:1;}
+
+/* ══════════════ MAP SECTION ══════════════ */
+.map-section{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;
+  margin-bottom:clamp(20px,3vh,32px);
+}
+.map-header{padding:clamp(20px,3vw,28px) clamp(20px,3vw,32px) 0;}
+.map-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(20px,4vw,26px);color:var(--white);margin-bottom:12px;}
+.map-legend{
+  display:flex;flex-wrap:wrap;gap:clamp(10px,2vw,20px);
+  font-family:'JetBrains Mono',monospace;
+  font-size:clamp(8px,1.5vw,10px);letter-spacing:1px;color:var(--muted);
+  margin-bottom:4px;
+}
+.leg-dot{width:8px;height:8px;border-radius:50%;display:inline-block;vertical-align:middle;margin-right:4px;}
+#leafletMap{height:clamp(280px,45vw,480px);width:100%;}
+
+/* Map fallback (when Leaflet not available) */
+.map-fallback{padding:40px;text-align:center;color:var(--muted);}
+
+/* ══════════════ CATEGORY FILTER TABS ══════════════ */
+.cat-tabs{
+  display:flex;flex-wrap:wrap;gap:8px;
+  margin-bottom:clamp(20px,3vh,32px);
+}
+.cat-tab{
+  font-family:'JetBrains Mono',monospace;
+  font-size:clamp(9px,1.5vw,10px);letter-spacing:2px;text-transform:uppercase;
+  padding:6px 14px;border-radius:2px;cursor:pointer;
+  border:1px solid var(--border);background:var(--panel);
+  color:var(--muted);transition:all .2s;
+  white-space:nowrap;
+}
+.cat-tab.active,.cat-tab:hover{
+  background:rgba(232,68,26,.15);
+  border-color:var(--accent);color:var(--accent);
+}
+
+/* ══════════════ COUNTRY GRID ══════════════ */
+.country-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr));
+  gap:var(--gap);background:var(--border2);
+  border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden;
+  margin-bottom:clamp(40px,6vh,80px);
+}
+.country-card{
+  background:var(--panel);padding:clamp(18px,3vw,26px);
+  position:relative;overflow:hidden;
+  transition:background .2s;
+}
+.country-card[data-region]{transition:all .3s;}
+.country-card.hidden{display:none;}
+.country-card:hover{background:var(--panel2);}
+.cc-flag{font-size:26px;margin-bottom:10px;display:block;}
+.cc-name{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(18px,3vw,22px);color:var(--white);
+  letter-spacing:.5px;margin-bottom:6px;
+}
+.cc-status-pill{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  padding:3px 8px;border-radius:2px;display:inline-block;margin-bottom:12px;
+}
+.s-active{background:rgba(74,158,255,.15);color:var(--blue);}
+.s-ban{background:rgba(232,68,26,.15);color:var(--accent);}
+.s-mora{background:rgba(245,166,35,.15);color:var(--amber);}
+.s-debate{background:rgba(30,207,180,.15);color:var(--teal);}
+.s-none{background:rgba(107,114,138,.15);color:var(--muted);}
+.cc-body{font-size:clamp(11px,2vw,13px);color:var(--muted);line-height:1.7;}
+.cc-num{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(30px,5vw,40px);margin-top:14px;display:block;line-height:1;
+}
+
+/* ══════════════ SEISMIC CHART ══════════════ */
+.seismic-canvas-wrap{
+  height:clamp(160px,25vw,220px);
+  overflow:hidden;background:var(--dark);border-radius:4px;margin-top:20px;
+  position:relative;
+}
+canvas#seismic{width:100%;height:100%;display:block;}
+
+/* Why Oklahoma matters callout */
+.why-box{
+  background:rgba(232,68,26,.05);
+  border:1px solid rgba(232,68,26,.2);
+  border-radius:4px;padding:clamp(16px,3vw,24px);
+  margin-top:20px;
+}
+.why-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:18px;color:var(--amber);margin-bottom:8px;
+}
+.why-body{font-size:clamp(12px,2vw,13.5px);color:var(--muted);line-height:1.75;}
+
+/* ══════════════ WATER PANELS ══════════════ */
+.water-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));
+  gap:var(--gap);background:var(--border2);
+  border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden;
+  margin-bottom:clamp(40px,6vh,80px);
+}
+.water-panel{background:var(--panel);padding:clamp(20px,3vw,32px);}
+.water-panel-title{
+  font-family:'Bebas Neue',sans-serif;font-size:clamp(18px,3vw,22px);
+  color:var(--white);margin-bottom:16px;letter-spacing:.5px;
+}
+.wave-box{
+  height:72px;position:relative;overflow:hidden;
+  border-radius:4px;background:rgba(74,158,255,.05);
+  border:1px solid rgba(74,158,255,.1);margin-bottom:8px;
+}
+.wave{
+  position:absolute;bottom:0;left:-200%;
+  width:400%;height:100%;border-radius:40%;
+}
+.wave1{background:rgba(74,158,255,.3);animation:wa 4s linear infinite;}
+.wave2{background:rgba(74,158,255,.18);animation:wa 5.5s linear infinite;animation-delay:-.8s;}
+.wave3{background:rgba(232,68,26,.15);animation:wa 7s linear infinite;animation-delay:-1.5s;}
+@keyframes wa{from{transform:translateX(0)}to{transform:translateX(50%)}}
+.wave-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--blue);text-transform:uppercase;margin-bottom:16px;}
+
+.chem-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;}
+.pill{
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;
+  padding:4px 10px;border-radius:2px;
+  background:rgba(232,68,26,.08);border:1px solid rgba(232,68,26,.2);
+  color:#ff8a70;cursor:default;
+  transition:background .2s,transform .15s;
+}
+.pill:hover{background:rgba(232,68,26,.2);transform:scale(1.04);}
+
+.contam-item{
+  background:var(--panel2);border-radius:4px;
+  padding:12px 16px;margin-bottom:10px;
+  border-left:2px solid var(--c,var(--accent));
+}
+.contam-cat{
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;
+  color:var(--c,var(--accent));text-transform:uppercase;margin-bottom:3px;
+}
+.contam-body{font-size:clamp(11px,2vw,13px);color:var(--text);}
+.contam-note{font-size:10px;color:var(--muted);margin-top:2px;}
+
+/* ══════════════ METHANE PANEL ══════════════ */
+.methane-section{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));
+  gap:var(--gap);background:var(--border2);
+  border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden;
+  margin-bottom:clamp(40px,6vh,80px);
+}
+.methane-panel{background:var(--panel);padding:clamp(20px,3vw,32px);}
+.methane-bar-row{margin-bottom:14px;}
+.methane-bar-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:5px;}
+.methane-bar-track{height:28px;background:var(--dark);border-radius:2px;overflow:hidden;}
+.methane-bar-fill{height:100%;border-radius:2px;display:flex;align-items:center;padding-left:10px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;}
+.methane-note{font-size:clamp(11px,2vw,12.5px);color:var(--muted);line-height:1.75;margin-top:16px;}
+.methane-note strong{color:var(--text);}
+
+/* ══════════════ MEXICO ══════════════ */
+.mx-hero{
+  background:var(--panel);border:1px solid var(--border);
+  border-left:4px solid var(--green);
+  border-radius:0 var(--radius) var(--radius) 0;
+  padding:clamp(24px,4vw,40px);margin-bottom:clamp(20px,3vh,32px);
+  position:relative;overflow:hidden;
+}
+.mx-hero::before{
+  content:'🇲🇽';position:absolute;right:24px;top:20px;
+  font-size:clamp(50px,10vw,80px);opacity:.06;pointer-events:none;
+}
+.mx-eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:4px;
+  color:var(--green);text-transform:uppercase;margin-bottom:10px;
+}
+.mx-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(32px,7vw,60px);color:var(--white);line-height:.95;
+  margin-bottom:16px;
+}
+.mx-body{font-size:clamp(12px,2vw,14px);color:var(--muted);max-width:680px;line-height:1.85;}
+
+.mx-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));
+  gap:var(--gap);background:var(--border2);border:1px solid var(--border2);
+  border-radius:var(--radius);overflow:hidden;margin-bottom:clamp(20px,3vh,32px);
+}
+.mx-card{background:var(--panel2);padding:clamp(18px,3vw,26px);}
+.mx-card-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;}
+.mx-card-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(16px,3vw,20px);color:var(--white);margin-bottom:8px;letter-spacing:.3px;}
+.mx-card-body{font-size:clamp(11px,2vw,12.5px);color:var(--muted);line-height:1.7;}
+.mx-card-num{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,6vw,44px);margin-top:12px;line-height:1;display:block;}
+
+/* Legislative timeline */
+.leg-wrap{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:var(--radius);padding:clamp(24px,4vw,36px);
+  margin-bottom:clamp(20px,3vh,32px);
+}
+.leg-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(22px,4vw,26px);color:var(--white);letter-spacing:.5px;margin-bottom:24px;}
+.leg-item{
+  display:grid;grid-template-columns:clamp(52px,8vw,76px) 1fr;
+  gap:clamp(12px,2vw,20px);
+  padding:clamp(14px,2vh,20px) 0;
+  border-bottom:1px solid var(--border2);
+}
+.leg-item:last-child{border-bottom:none;}
+.leg-year{font-family:'Bebas Neue',sans-serif;font-size:clamp(22px,4vw,28px);color:var(--accent);line-height:1;padding-top:2px;}
+.leg-tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:2px;display:inline-block;margin-bottom:6px;}
+.tag-law{background:rgba(74,158,255,.12);color:var(--blue);}
+.tag-debate{background:rgba(245,166,35,.12);color:var(--amber);}
+.tag-ban{background:rgba(232,68,26,.12);color:var(--accent);}
+.tag-sci{background:rgba(30,207,180,.12);color:var(--teal);}
+.tag-active{background:rgba(34,197,94,.12);color:var(--green);}
+.leg-ctitle{font-family:'Syne',sans-serif;font-size:clamp(12px,2.5vw,14px);font-weight:700;color:var(--white);margin-bottom:5px;}
+.leg-cbody{font-size:clamp(11px,2vw,12.5px);color:var(--muted);line-height:1.7;}
+
+/* Basins */
+.basin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,200px),1fr));gap:12px;margin-bottom:clamp(40px,6vh,80px);}
+.basin-card{background:var(--panel);border:1px solid var(--border2);border-radius:4px;padding:clamp(16px,3vw,20px);transition:border-color .2s,transform .2s;cursor:default;}
+.basin-card:hover{border-color:var(--accent);transform:translateY(-2px);}
+.basin-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(16px,3vw,18px);color:var(--white);margin-bottom:3px;}
+.basin-state{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--accent);text-transform:uppercase;margin-bottom:8px;}
+.basin-body{font-size:clamp(10px,1.8vw,12px);color:var(--muted);line-height:1.6;}
+.basin-tcf{font-family:'Bebas Neue',sans-serif;font-size:clamp(26px,5vw,32px);color:var(--amber);margin-top:8px;display:block;}
+
+/* ══════════════ SOURCES ══════════════ */
+.sources-wrap{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;
+  margin-bottom:clamp(40px,6vh,80px);
+}
+.sources-header{padding:clamp(24px,4vw,32px) clamp(24px,4vw,36px) clamp(16px,2vh,24px);border-bottom:1px solid var(--border2);}
+.sources-method{padding:clamp(20px,3vw,28px) clamp(24px,4vw,36px);border-bottom:1px solid var(--border2);}
+.sources-method-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(18px,3vw,22px);color:var(--white);margin-bottom:12px;}
+.sources-method-body{font-size:clamp(12px,2vw,13.5px);color:var(--muted);line-height:1.85;max-width:760px;}
+.sources-method-body strong{color:var(--text);}
+.source-group{padding:clamp(16px,3vw,24px) clamp(24px,4vw,36px);border-bottom:1px solid var(--border2);}
+.source-group:last-child{border-bottom:none;}
+.sg-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--accent);margin-bottom:14px;}
+.source-list{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.source-item{
+  display:grid;grid-template-columns:28px 1fr;gap:12px;
+  padding:clamp(10px,2vw,14px) clamp(12px,2vw,16px);
+  background:var(--panel2);border-radius:4px;border:1px solid var(--border2);
+  transition:border-color .2s;
+}
+.source-item:hover{border-color:var(--accent);}
+.source-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);padding-top:2px;}
+.source-title{font-size:clamp(11px,2vw,13px);font-weight:700;color:var(--white);margin-bottom:3px;line-height:1.4;}
+.source-authors{font-size:clamp(10px,1.8vw,11.5px);color:var(--muted);margin-bottom:4px;line-height:1.4;}
+.source-year{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--teal);margin-left:6px;}
+.source-link{font-family:'JetBrains Mono',monospace;font-size:clamp(9px,1.5vw,10px);color:var(--accent);word-break:break-all;letter-spacing:.3px;}
+.source-link:hover{text-decoration:underline;}
+
+/* ══════════════ SHARE MODAL ══════════════ */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.85);
+  z-index:9800;display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .25s;
+  padding:16px;
+}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:var(--radius);padding:clamp(24px,5vw,40px);
+  max-width:480px;width:100%;
+  transform:translateY(20px);transition:transform .25s;
+}
+.modal-overlay.open .modal{transform:translateY(0);}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--white);margin-bottom:24px;}
+.share-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.share-btn{
+  display:flex;align-items:center;gap:10px;
+  padding:14px 16px;border-radius:4px;
+  border:1px solid var(--border);background:var(--panel2);
+  color:var(--text);font-family:'Syne',sans-serif;font-size:13px;font-weight:600;
+  cursor:pointer;transition:background .2s,border-color .2s;
+  text-decoration:none;
+}
+.share-btn:hover{background:var(--border);border-color:var(--accent);color:var(--white);text-decoration:none;}
+.share-btn-icon{font-size:20px;}
+.share-url-wrap{display:flex;gap:8px;margin-bottom:16px;}
+.share-url-input{
+  flex:1;background:var(--dark);border:1px solid var(--border);
+  border-radius:4px;padding:10px 14px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  outline:none;
+}
+.copy-btn{
+  background:rgba(232,68,26,.15);border:1px solid rgba(232,68,26,.3);
+  border-radius:4px;padding:10px 16px;
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;
+  color:var(--accent);cursor:pointer;white-space:nowrap;
+  transition:background .2s;
+}
+.copy-btn:hover{background:rgba(232,68,26,.3);}
+.modal-close{
+  background:none;border:none;color:var(--muted);font-size:24px;
+  cursor:pointer;float:right;line-height:1;margin-top:-4px;
+}
+
+/* ══════════════ CALLOUT ══════════════ */
+.callout{
+  border-left:3px solid var(--accent);
+  background:rgba(232,68,26,.04);
+  padding:clamp(16px,3vw,24px) clamp(20px,3vw,28px);
+  border-radius:0 4px 4px 0;margin-bottom:clamp(32px,5vh,60px);
+}
+.callout-body{font-size:clamp(12px,2vw,14px);color:var(--muted);line-height:1.8;}
+.callout-body strong{color:var(--white);}
+
+/* ══════════════ DIVIDER ══════════════ */
+.divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:0 0 clamp(40px,6vh,80px);}
+
+/* ══════════════ FOOTER ══════════════ */
+footer{text-align:center;padding:clamp(40px,6vh,60px) 24px clamp(50px,8vh,80px);border-top:1px solid var(--border2);}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:4px;color:var(--muted);margin-bottom:8px;}
+.footer-lab{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:4px;color:var(--accent);text-transform:uppercase;margin-bottom:12px;}
+.footer-meta{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--muted);opacity:.5;text-transform:uppercase;}
+
+/* ══════════════ TOOLTIP ══════════════ */
+#tooltip{
+  position:fixed;background:var(--panel2);border:1px solid var(--border);
+  border-radius:4px;padding:10px 14px;font-size:12px;color:var(--text);
+  pointer-events:none;z-index:7000;max-width:220px;
+  opacity:0;transition:opacity .15s;line-height:1.5;
+}
+
+/* ══════════════ MOBILE OVERRIDES ══════════════ */
+@media(max-width:480px){
+  .hero-kpis{gap:20px;}
+  .kpi-num{font-size:32px;}
+  .bar-lbl{width:90px;font-size:9px;}
+}
+</style>
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+</head>
+<body>
+
+<div id="progress"></div>
+<div id="tooltip"></div>
+
+<!-- ══ SHARE MODAL ══ -->
+<div class="modal-overlay" id="shareModal">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('shareModal').classList.remove('open')">×</button>
+    <div class="modal-title">Compartir este análisis</div>
+    <div class="share-grid">
+      <a class="share-btn" id="shareTwitter" href="#" target="_blank" rel="noopener">
+        <span class="share-btn-icon">𝕏</span> Twitter / X
+      </a>
+      <a class="share-btn" id="shareFB" href="#" target="_blank" rel="noopener">
+        <span class="share-btn-icon">📘</span> Facebook
+      </a>
+      <a class="share-btn" id="shareWA" href="#" target="_blank" rel="noopener">
+        <span class="share-btn-icon">💬</span> WhatsApp
+      </a>
+      <a class="share-btn" id="shareTG" href="#" target="_blank" rel="noopener">
+        <span class="share-btn-icon">✈️</span> Telegram
+      </a>
+    </div>
+    <div class="share-url-wrap">
+      <input type="text" class="share-url-input" id="shareUrl" readonly>
+      <button class="copy-btn" onclick="copyUrl()">COPIAR</button>
+    </div>
+    <p style="font-size:11px;color:var(--muted)">Vanguardia IA Lab · Análisis de impacto ambiental global del fracking</p>
+  </div>
+</div>
+
+<!-- ══ NAV ══ -->
+<nav id="nav">
+  <div class="nav-brand">Fracking · Vanguardia IA Lab</div>
+  <ul class="nav-links">
+    <li><a href="#proceso">Proceso</a></li>
+    <li><a href="#global">Mundial</a></li>
+    <li><a href="#mexico">México</a></li>
+    <li><a href="#datos">Datos</a></li>
+    <li><a href="#fuentes">Fuentes</a></li>
+    <li><a class="nav-share" onclick="openShare()">↑ Compartir</a></li>
+  </ul>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-texture"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-cracks"></div>
+
+  <p class="hero-eyebrow">Análisis de impacto ambiental global · 2024</p>
+
+  <div class="hero-title-wrap">
+    <span class="hero-sub-text">Extracción con</span>
+    <span class="hero-main-word">
+      <span class="word-frack">FRACK</span><span class="word-ing">ING</span>
+    </span>
+    <span class="hero-byline">By Vanguardia IA Lab</span>
+  </div>
+
+  <p class="hero-tagline">La fracturación hidráulica extrae gas y petróleo del subsuelo. El costo —en agua, suelo, aire y sismicidad— persiste décadas después de que los pozos cierran.</p>
+
+  <div class="hero-kpis">
+    <div>
+      <span class="kpi-num" style="color:var(--blue)">30M</span>
+      <div class="kpi-label">litros/pozo</div>
+    </div>
+    <div>
+      <span class="kpi-num" style="color:var(--accent)">86×</span>
+      <div class="kpi-label">CO₂ equiv.</div>
+    </div>
+    <div>
+      <span class="kpi-num" style="color:var(--amber)">50+</span>
+      <div class="kpi-label">países regulan</div>
+    </div>
+    <div>
+      <span class="kpi-num" style="color:var(--teal)">750</span>
+      <div class="kpi-label">químicos</div>
+    </div>
+  </div>
+
+  <div class="scroll-cue">
+    <div class="scroll-cue-text">Explorar</div>
+    <div class="scroll-cue-line"></div>
+  </div>
+</section>
+
+<!-- ══ PROCESO ══ -->
+<section id="proceso" class="section">
+  <div class="section-eyebrow reveal">01 — Proceso</div>
+  <h2 class="section-title reveal rd1">Cómo funciona</h2>
+  <p class="section-sub reveal rd2">Un pozo penetra hasta 3 km, dobla horizontal y fractura la roca con fluido a altísima presión. Cada etapa genera impactos distintos.</p>
+
+  <div class="diagram-wrap reveal rd3">
+<!--
+  LAYOUT MAP (viewBox 0 0 1100 600):
+  ┌──────────────────────────────────────────────────────────────────────────┐
+  │ ZONE A: x=0–200   → LEFT callouts (FRACTURACIÓN, AGUAS RES.)            │
+  │ ZONE B: x=210–480 → Well/drill area + fractures + plume                 │
+  │ ZONE C: x=490–510 → Layer label anchor column (text-anchor=end at x=500)│
+  │ ZONE D: x=520–730 → Surface equipment + RIGHT callouts                  │
+  │ ZONE E: x=740–810 → METANO FUGITIVO callout (top-right)                 │
+  │ ZONE F: x=820–870 → Depth scale                                         │
+  │ ZONE G: x=880–1090→ Layer name labels (text-anchor=start)               │
+  └──────────────────────────────────────────────────────────────────────────┘
+  Vertical zones (y):
+    0–130   : sky / surface
+    130–165 : topsoil band
+    165–250 : aquifer
+    250–335 : impermeable rock
+    335–435 : shale
+    435–600 : deep bedrock
+-->
+    <svg id="diagSvg" viewBox="0 0 1100 600" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- ░░ BACKGROUND LAYERS ░░ -->
+      <rect width="1100" height="130" fill="#0c0e14"/>
+      <rect y="130" width="1100" height="35"  fill="#10130e"/>
+      <rect y="165" width="1100" height="85"  fill="#111520"/>
+      <rect y="250" width="1100" height="85"  fill="#0e1118"/>
+      <rect y="335" width="1100" height="100" fill="#1a120a" opacity=".9"/>
+      <rect y="435" width="1100" height="165" fill="#0b0c10"/>
+      <!-- tints -->
+      <rect y="165" width="1100" height="85"  fill="rgba(74,158,255,.06)"/>
+      <rect y="335" width="1100" height="100" fill="rgba(245,166,35,.05)"/>
+      <!-- dividers -->
+      <line x1="0" y1="165" x2="1100" y2="165" stroke="#1a1f2a" stroke-width=".8"/>
+      <line x1="0" y1="250" x2="1100" y2="250" stroke="#1a1f2a" stroke-width=".8"/>
+      <line x1="0" y1="335" x2="1100" y2="335" stroke="#1a1f2a" stroke-width=".8"/>
+      <line x1="0" y1="435" x2="1100" y2="435" stroke="#1a1f2a" stroke-width=".8"/>
+
+      <!-- ░░ ZONE G: LAYER LABELS — far right, no collision possible ░░ -->
+      <text x="890" y="155" font-family="JetBrains Mono,monospace" font-size="9" fill="#4a4f60" letter-spacing="2">SUELO SUPERFICIAL</text>
+      <text x="890" y="212" font-family="JetBrains Mono,monospace" font-size="9" fill="#4a9eff" letter-spacing="2">ACUÍFERO FREÁTICO</text>
+      <text x="890" y="296" font-family="JetBrains Mono,monospace" font-size="9" fill="#4a4f60" letter-spacing="2">ROCA IMPERMEABLE</text>
+      <text x="890" y="390" font-family="JetBrains Mono,monospace" font-size="9" fill="#f5a623" letter-spacing="2">ESQUISTO / SHALE</text>
+      <text x="890" y="555" font-family="JetBrains Mono,monospace" font-size="9" fill="#4a4f60" letter-spacing="2">LECHO ROCOSO PROFUNDO</text>
+
+      <!-- ░░ ZONE F: DEPTH SCALE ░░ -->
+      <line x1="858" y1="130" x2="858" y2="435" stroke="#252a38" stroke-width="1"/>
+      <line x1="853" y1="130" x2="863" y2="130" stroke="#252a38" stroke-width="1"/>
+      <line x1="853" y1="435" x2="863" y2="435" stroke="#252a38" stroke-width="1"/>
+      <text x="840" y="290" font-family="JetBrains Mono,monospace" font-size="8" fill="#4a4f60" letter-spacing="1" text-anchor="middle" transform="rotate(-90,840,290)">~3 km</text>
+
+      <!-- ░░ ZONE B: WELL CASING (centered at x=480) ░░ -->
+      <rect x="469" y="0"   width="22" height="400" fill="#1e2230"/>
+      <rect x="472" y="0"   width="16" height="400" fill="none" stroke="#1ecfb4" stroke-width=".8" opacity=".3"/>
+      <rect x="476" y="0"   width="6"  height="400" fill="rgba(30,207,180,.07)"/>
+
+      <!-- HORIZONTAL WELL -->
+      <rect x="230" y="362" width="239" height="16" fill="#1e2230"/>
+      <rect x="232" y="365" width="235" height="10" fill="none" stroke="#1ecfb4" stroke-width=".8" opacity=".3"/>
+      <rect x="469" y="358" width="16"  height="28" fill="#1e2230"/>
+
+      <!-- FRACTURE LINES -->
+      <g id="fracLines">
+        <line x1="252" y1="362" x2="204" y2="322" stroke="#e8441a" stroke-width="2"   opacity=".65" class="frac"/>
+        <line x1="272" y1="362" x2="234" y2="302" stroke="#e8441a" stroke-width="1.5" opacity=".55" class="frac"/>
+        <line x1="286" y1="370" x2="248" y2="412" stroke="#e8441a" stroke-width="1.5" opacity=".5"  class="frac"/>
+        <line x1="308" y1="362" x2="332" y2="322" stroke="#e8441a" stroke-width="2"   opacity=".65" class="frac"/>
+        <line x1="340" y1="362" x2="368" y2="318" stroke="#e8441a" stroke-width="1.5" opacity=".55" class="frac"/>
+        <line x1="352" y1="374" x2="380" y2="416" stroke="#e8441a" stroke-width="1.5" opacity=".5"  class="frac"/>
+        <line x1="394" y1="362" x2="414" y2="325" stroke="#e8441a" stroke-width="1.5" opacity=".4"  class="frac"/>
+        <line x1="236" y1="370" x2="188" y2="397" stroke="#e8441a" stroke-width="1.5" opacity=".4"  class="frac"/>
+      </g>
+      <!-- Gas particles group -->
+      <g id="gasG"></g>
+
+      <!-- CONTAMINATION PLUME (inside aquifer zone y=165–250, centered on plume x=380) -->
+      <ellipse cx="380" cy="208" rx="88" ry="26" fill="rgba(232,68,26,.1)"/>
+      <ellipse cx="380" cy="208" rx="52" ry="16" fill="rgba(232,68,26,.18)"/>
+      <ellipse cx="365" cy="208" rx="22" ry="9"  fill="rgba(232,68,26,.28)"/>
+
+      <!-- ░░ SURFACE EQUIPMENT (ZONE D: x=520–730) ░░ -->
+      <!-- derrick -->
+      <polygon points="479,0 457,130 501,130" fill="#1e2230"/>
+      <polygon points="479,14 460,130 498,130" fill="none" stroke="#e8441a" stroke-width=".8" opacity=".35"/>
+      <!-- pump jack -->
+      <rect x="522" y="104" width="12" height="28" rx="2" fill="#252a38"/>
+      <ellipse cx="528" cy="102" rx="14" ry="5" fill="#252a38"/>
+      <!-- tank -->
+      <rect x="548" y="92" width="52" height="34" rx="3" fill="#181c27" stroke="#252a38" stroke-width="1"/>
+      <text x="574" y="114" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#4a9eff">H₂O+Q</text>
+      <!-- flare stack -->
+      <rect x="618" y="74" width="6" height="58" fill="#252a38"/>
+      <ellipse cx="621" cy="70" rx="9"  ry="17" fill="rgba(245,166,35,.75)"/>
+      <ellipse cx="621" cy="62" rx="5"  ry="11" fill="rgba(232,68,26,.6)"/>
+      <ellipse cx="621" cy="56" rx="3"  ry="7"  fill="rgba(255,255,255,.12)"/>
+
+      <!-- ░░ CALLOUT BOXES ░░
+           Layout: callouts A & B on RIGHT (x≥640, clear of layer labels that start at x=890)
+                   callouts C & D on LEFT  (x≤200, clear of well at x=469)
+           Each callout occupies a distinct vertical slot with 20px padding between boxes.
+      -->
+
+      <!-- CALLOUT A: METANO FUGITIVO
+           Slot: y=18–62  (sky zone, top-right)
+           Box:  x=640–830 (width=190)  ← safely left of depth scale at x=858
+           Line: from flare top (621,56) to box left-center (640,40) -->
+      <line x1="621" y1="56" x2="638" y2="40" stroke="#1ecfb4" stroke-width=".9" stroke-dasharray="4,3"/>
+      <rect x="640" y="20" width="192" height="44" rx="3" fill="#0a1a18" stroke="#1ecfb4" stroke-width="1"/>
+      <text x="652" y="38"  font-family="JetBrains Mono,monospace" font-size="8.5" fill="#1ecfb4" letter-spacing="1.5">METANO FUGITIVO</text>
+      <text x="652" y="55"  font-family="Syne,sans-serif"          font-size="10"  fill="#6b728a">CH₄ × 86 CO₂ (20 años)</text>
+
+      <!-- CALLOUT B: CONTAMINACIÓN
+           Slot: y=168–214 (inside aquifer y=165–250)
+           Box:  x=640–830
+           Line: from plume right (468,208) to box left (638,191) -->
+      <line x1="468" y1="208" x2="638" y2="191" stroke="#e8441a" stroke-width=".9" stroke-dasharray="4,3"/>
+      <rect x="640" y="170" width="192" height="46" rx="3" fill="#1a0e0a" stroke="#e8441a" stroke-width="1"/>
+      <text x="652" y="187" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#e8441a" letter-spacing="1.5">CONTAMINACIÓN</text>
+      <text x="652" y="202" font-family="Syne,sans-serif"          font-size="10"  fill="#6b728a">Migración a acuífero freático</text>
+      <text x="652" y="213" font-family="Syne,sans-serif"          font-size="10"  fill="#6b728a">por fallas y pozos mal sellados</text>
+
+      <!-- CALLOUT C: FRACTURACIÓN
+           Slot: y=336–382 (inside shale y=335–435 — first 48px)
+           Box:  x=14–196
+           Line: from horizontal well left (232,370) to box right (196,359) -->
+      <line x1="232" y1="370" x2="198" y2="359" stroke="#f5a623" stroke-width=".9" stroke-dasharray="4,3"/>
+      <rect x="14"  y="338" width="180" height="44" rx="3" fill="#1a1508" stroke="#f5a623" stroke-width="1"/>
+      <text x="24"  y="356" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#f5a623" letter-spacing="1.5">FRACTURACIÓN</text>
+      <text x="24"  y="372" font-family="Syne,sans-serif"          font-size="10"  fill="#6b728a">1,000–15,000 PSI</text>
+
+      <!-- CALLOUT D: AGUAS RESIDUALES
+           Slot: y=446–492 (inside deep bedrock y=435–600 — top portion)
+           Box:  x=14–196
+           Line: from fracture area bottom (248,412) down to box (100,444) -->
+      <line x1="248" y1="416" x2="110" y2="444" stroke="#9b5cf6" stroke-width=".9" stroke-dasharray="4,3"/>
+      <rect x="14"  y="448" width="180" height="44" rx="3" fill="#12101a" stroke="#9b5cf6" stroke-width="1"/>
+      <text x="24"  y="466" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#9b5cf6" letter-spacing="1.5">AGUAS RESIDUALES</text>
+      <text x="24"  y="482" font-family="Syne,sans-serif"          font-size="10"  fill="#6b728a">Sismicidad inducida</text>
+
+    </svg>
+  </div>
+
+  <!-- WATER PANELS -->
+  <div class="water-grid reveal rd2">
+    <div class="water-panel">
+      <div class="water-panel-title">💧 Fluido de fractura</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Por pozo: <strong style="color:var(--white)">7.5–30 millones de litros</strong></p>
+      <div style="margin-bottom:4px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--blue);letter-spacing:2px">AGUA — 90%</div>
+      <div class="wave-box">
+        <div class="wave wave1"></div><div class="wave wave2"></div><div class="wave wave3"></div>
+      </div>
+      <div class="wave-label">Extraída de ríos, acuíferos o pozos</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--amber);letter-spacing:2px;margin-bottom:8px">ARENA 9.5% · QUÍMICOS 0.5%</div>
+      <div class="chem-pills">
+        <span class="pill">HCl</span><span class="pill">Biocidas</span>
+        <span class="pill">Etileno glicol</span><span class="pill">KCl</span>
+        <span class="pill">Ácido acético</span><span class="pill">Poliacrilamida</span>
+        <span class="pill">Bórax</span><span class="pill">Isopropanol</span>
+        <span class="pill">Surfactantes</span><span class="pill">+741 más</span>
+      </div>
+      <p style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.6">Las pastillas muestran los principales compuestos documentados por la EPA. Muchos son cancerígenos o disruptores endocrinos.</p>
+    </div>
+    <div class="water-panel">
+      <div class="water-panel-title">☠️ Agua de retorno (flowback)</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Solo <strong style="color:var(--accent)">30–50%</strong> retorna. El resto queda <strong style="color:var(--white)">permanentemente</strong> en el subsuelo.</p>
+      <div class="contam-item" style="--c:var(--accent)">
+        <div class="contam-cat">TDS — Sales disueltas</div>
+        <div class="contam-body">Hasta 300,000 mg/L</div>
+        <div class="contam-note">Agua marina ≈ 35,000 mg/L · 8.5× más concentrado</div>
+      </div>
+      <div class="contam-item" style="--c:var(--amber)">
+        <div class="contam-cat">NORM — Radioactividad</div>
+        <div class="contam-body">Ra-226, Ra-228, Uranio, Radón</div>
+        <div class="contam-note">Materiales radiactivos naturales liberados por la perforación</div>
+      </div>
+      <div class="contam-item" style="--c:var(--blue)">
+        <div class="contam-cat">BTEX — Cancerígenos confirmados</div>
+        <div class="contam-body">Benceno, Tolueno, Etilbenceno, Xileno</div>
+        <div class="contam-note">Benceno: cancerígeno Grupo 1 según la IARC</div>
+      </div>
+      <div class="contam-item" style="--c:var(--purple)">
+        <div class="contam-cat">Metales pesados</div>
+        <div class="contam-body">Ba, Sr, As, Pb, Hg</div>
+        <div class="contam-note">Bioacumulables en cadena trófica; no se degradan</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ IMPACTOS ══ -->
+<div class="section" style="padding-top:0">
+  <div class="section-eyebrow reveal">Consecuencias directas</div>
+  <h2 class="section-title reveal rd1">6 impactos clave</h2>
+  <p class="section-sub reveal rd2">Evidencia científica acumulada desde 2010. Magnitud varía según geología, densidad operativa y marco regulatorio.</p>
+
+  <div class="impact-grid reveal rd3">
+    <div class="impact-card" style="--c:var(--blue)">
+      <span class="ic-icon">💧</span>
+      <div class="ic-title">Contaminación del agua</div>
+      <div class="ic-body">Fluidos con BTEX, NORM y metales pesados migran a acuíferos por fallas o pozos mal sellados. Más de 1,000 casos documentados en EE.UU.</div>
+      <div class="ic-stat"><span class="ic-num">750</span><span class="ic-unit">QUÍMICOS<br>USADOS</span></div>
+    </div>
+    <div class="impact-card" style="--c:var(--accent)">
+      <span class="ic-icon">🌫️</span>
+      <div class="ic-title">Emisiones de metano</div>
+      <div class="ic-body">El metano fugitivo tiene un potencial de calentamiento 86 veces mayor que el CO₂ a 20 años. Las fugas representan 2.3–6.2% del gas producido.</div>
+      <div class="ic-stat"><span class="ic-num">86×</span><span class="ic-unit">MÁS POTENTE<br>QUE CO₂</span></div>
+    </div>
+    <div class="impact-card" style="--c:var(--amber)">
+      <span class="ic-icon">🌍</span>
+      <div class="ic-title">Sismicidad inducida</div>
+      <div class="ic-body">La inyección de aguas residuales activa fallas dormidas. Oklahoma pasó de ~20 sismos/año a más de 900 en 2014. También documentado en China y Canadá.</div>
+      <div class="ic-stat"><span class="ic-num">+300%</span><span class="ic-unit">SISMOS<br>EN 5 AÑOS</span></div>
+    </div>
+    <div class="impact-card" style="--c:var(--teal)">
+      <span class="ic-icon">🏜️</span>
+      <div class="ic-title">Degradación del suelo</div>
+      <div class="ic-body">Derrames de fluidos y agua de retorno contaminan con sales, BTEX e isótopos radiactivos. Recuperación requiere 30+ años. Compactación por maquinaria pesada.</div>
+      <div class="ic-stat"><span class="ic-num">30+</span><span class="ic-unit">AÑOS DE<br>RECUPERACIÓN</span></div>
+    </div>
+    <div class="impact-card" style="--c:var(--purple)">
+      <span class="ic-icon">🐾</span>
+      <div class="ic-title">Pérdida de biodiversidad</div>
+      <div class="ic-body">Carreteras de acceso, tuberías y plataformas fragmentan hábitats. El ruido y luz 24/7 alteran reproducción y migración de fauna silvestre en radio de km.</div>
+      <div class="ic-stat"><span class="ic-num">4–16</span><span class="ic-unit">HA POR<br>POZO</span></div>
+    </div>
+    <div class="impact-card" style="--c:var(--accent)">
+      <span class="ic-icon">🚰</span>
+      <div class="ic-title">Consumo hídrico masivo</div>
+      <div class="ic-body">Un pozo requiere entre 7.5 y 30 millones de litros. El 50–70% queda en el subsuelo permanentemente, extrayendo agua del ciclo hidrológico para siempre.</div>
+      <div class="ic-stat"><span class="ic-num">30M</span><span class="ic-unit">LITROS<br>POR POZO</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ GLOBAL ══ -->
+<section id="global" class="section">
+  <div class="section-eyebrow reveal">02 — Panorama mundial</div>
+  <h2 class="section-title reveal rd1">El fracking en el mundo</h2>
+  <p class="section-sub reveal rd2">Más de 50 países tienen regulación activa. El 90% de la producción se concentra en EE.UU., Canadá, Argentina y China. El mapa muestra el estado regulatorio vigente al 2024.</p>
+
+  <!-- REAL MAP with Leaflet -->
+  <div class="map-section reveal rd3">
+    <div class="map-header">
+      <div class="map-title">Estado regulatorio por país · 2024</div>
+      <div class="map-legend">
+        <span><span class="leg-dot" style="background:#e8441a"></span>Prohibición total</span>
+        <span><span class="leg-dot" style="background:#f5a623"></span>Moratoria</span>
+        <span><span class="leg-dot" style="background:#4a9eff"></span>Activo</span>
+        <span><span class="leg-dot" style="background:#1ecfb4"></span>En debate</span>
+        <span><span class="leg-dot" style="background:#6b728a"></span>Sin reg. clara</span>
+      </div>
+    </div>
+    <div id="leafletMap"></div>
+  </div>
+
+  <!-- CATEGORY TABS + COUNTRY GRID -->
+  <div class="cat-tabs reveal" id="catTabs">
+    <button class="cat-tab active" data-cat="all">Todos los países</button>
+    <button class="cat-tab" data-cat="activo">Activos</button>
+    <button class="cat-tab" data-cat="ban">Prohibición</button>
+    <button class="cat-tab" data-cat="mora">Moratoria</button>
+    <button class="cat-tab" data-cat="debate">En debate</button>
+    <button class="cat-tab" data-cat="americas">Américas</button>
+    <button class="cat-tab" data-cat="europa">Europa</button>
+  </div>
+
+  <div class="country-grid reveal rd1" id="countryGrid">
+    <!-- Cards injected by JS from data object -->
+  </div>
+
+  <!-- SEISMIC -->
+  <div class="chart-wrap reveal">
+    <div class="section-eyebrow" style="margin-bottom:8px">Oklahoma — Caso de estudio global</div>
+    <div class="chart-title">Terremotos M≥3.0 anuales — EE.UU. zona de fracking (2000–2022)</div>
+    <div class="chart-sub">Correlación directa con inyección de aguas residuales (USGS, 2015). El descenso post-2015 refleja reducción voluntaria de inyecciones por presión regulatoria, no el fin del fenómeno.</div>
+    <div class="seismic-canvas-wrap">
+      <canvas id="seismic"></canvas>
+    </div>
+    <div class="why-box">
+      <div class="why-title">¿Por qué Oklahoma es el caso de referencia?</div>
+      <div class="why-body">Oklahoma pasó de ser un estado sísmicamente tranquilo a superar a California —históricamente el más activo— en número de terremotos M≥3. El USGS vinculó directamente 97% de esta actividad a pozos de inyección de aguas residuales del fracking (no a la fracturación en sí). Esto convirtió a Oklahoma en el caso científico más documentado de sismicidad inducida. El patrón se ha replicado en <strong style="color:var(--white)">Sichuan (China)</strong>, <strong style="color:var(--white)">British Columbia (Canadá)</strong>, <strong style="color:var(--white)">Lancashire (Reino Unido)</strong> y <strong style="color:var(--white)">Groningen (Países Bajos)</strong>, validando el mecanismo a escala global.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ METHANE ══ -->
+<div class="section" style="padding-top:0">
+  <div class="methane-section reveal">
+    <div class="methane-panel">
+      <div class="water-panel-title" style="font-family:'Bebas Neue',sans-serif;font-size:22px;margin-bottom:6px">🌡️ Metano: el GEI más urgente</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:24px">Potencial de calentamiento global (PCG) comparado con CO₂</div>
+      <div class="methane-bar-row">
+        <div class="methane-bar-label">CO₂ — LÍNEA BASE</div>
+        <div class="methane-bar-track">
+          <div class="methane-bar-fill" style="width:100%;background:rgba(74,158,255,.35);color:var(--blue)">1×</div>
+        </div>
+      </div>
+      <div class="methane-bar-row">
+        <div class="methane-bar-label">CH₄ — 100 AÑOS</div>
+        <div class="methane-bar-track">
+          <div class="methane-bar-fill" style="width:31%;background:rgba(245,166,35,.4);color:var(--amber)">28×</div>
+        </div>
+      </div>
+      <div class="methane-bar-row">
+        <div class="methane-bar-label" style="color:var(--accent)">CH₄ — 20 AÑOS ⚠️</div>
+        <div class="methane-bar-track">
+          <div class="methane-bar-fill" style="width:95%;background:rgba(232,68,26,.45);color:var(--accent);font-size:16px;font-weight:700">86×</div>
+        </div>
+      </div>
+      <div class="methane-note">
+        A <strong>20 años</strong> —el horizonte de acción del Acuerdo de París— el metano es el GEI más urgente. Las fugas en pozos de fracking representan entre <strong>2.3% y 6.2%</strong> del gas producido (Alvarez et al., Science 2018). Si las fugas superan el 3.2%, la huella climática del gas shale es <strong>peor que la del carbón</strong>.
+      </div>
+    </div>
+    <div class="methane-panel">
+      <div class="water-panel-title" style="font-family:'Bebas Neue',sans-serif;font-size:22px;margin-bottom:6px">💧 Balance hídrico: equivalencias</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:16px">Para que los números sean comprensibles</div>
+      <div class="contam-item" style="--c:var(--blue)">
+        <div class="contam-cat">1 pozo de fracking</div>
+        <div class="contam-body">= 30,000,000 litros de agua</div>
+        <div class="contam-note">≈ consumo anual de 1,500 hogares mexicanos</div>
+      </div>
+      <div class="contam-item" style="--c:var(--accent)">
+        <div class="contam-cat">Parque Permian — EE.UU.</div>
+        <div class="contam-body">~60 millones m³/año solo en agua</div>
+        <div class="contam-note">≈ consumo anual de Ciudad Juárez × 2</div>
+      </div>
+      <div class="contam-item" style="--c:var(--amber)">
+        <div class="contam-cat">Proyección cuencas norte México</div>
+        <div class="contam-body">30–80% del agua subterránea disponible</div>
+        <div class="contam-note">Según modelos CNH + CONAGUA (2016)</div>
+      </div>
+      <div class="contam-item" style="--c:var(--teal)">
+        <div class="contam-cat">Lo que no vuelve</div>
+        <div class="contam-body">50–70% del fluido queda en subsuelo permanentemente</div>
+        <div class="contam-note">Extraído del ciclo hidrológico para siempre — no es recuperable</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MEXICO ══ -->
+<section id="mexico" class="section">
+  <div class="section-eyebrow reveal">03 — México</div>
+  <h2 class="section-title reveal rd1">El caso mexicano</h2>
+
+  <div class="mx-hero reveal rd2">
+    <div class="mx-eyebrow">🟢 Debate activo · 2024</div>
+    <div class="mx-title">Reservas enormes,<br>regulación frágil</div>
+    <div class="mx-body">México posee las <strong style="color:var(--white)">sextas reservas mundiales de gas de esquisto</strong> (545 Tcf según la AIE). La Reforma Energética de 2013 abrió la puerta al fracking. AMLO frenó concesiones sin decreto formal. El gobierno de Claudia Sheinbaum revisa el marco, pero sin posición legislativa firme. El debate enfrenta soberanía energética, transición ecológica, derechos hídricos y presión comunitaria.</div>
+  </div>
+
+  <div class="mx-grid reveal rd3">
+    <div class="mx-card">
+      <div class="mx-card-label">Reservas estimadas</div>
+      <div class="mx-card-title">Potencial técnico shale gas</div>
+      <div class="mx-card-body">AIE (2013) estimó 545 Tcf. SENER redujo a 60–150 Tcf en evaluaciones conservadoras. La diferencia refleja incertidumbre geológica.</div>
+      <span class="mx-card-num" style="color:var(--amber)">545 Tcf</span>
+    </div>
+    <div class="mx-card">
+      <div class="mx-card-label">Cuencas identificadas</div>
+      <div class="mx-card-title">4 formaciones prioritarias</div>
+      <div class="mx-card-body">Burgos, Sabinas-Burro-Picachos, Tampico-Misantla y Veracruz. Las del norte comparten la formación Eagle Ford con Texas.</div>
+      <span class="mx-card-num" style="color:var(--blue)">4</span>
+    </div>
+    <div class="mx-card">
+      <div class="mx-card-label">Conflicto hídrico</div>
+      <div class="mx-card-title">Zonas de alta escasez</div>
+      <div class="mx-card-body">Las principales cuencas coinciden con zonas de estrés hídrico severo. El norte de México tiene disponibilidad de agua 80% menor a la media nacional.</div>
+      <span class="mx-card-num" style="color:var(--accent)">−80%</span>
+    </div>
+    <div class="mx-card">
+      <div class="mx-card-label">Pozos PEMEX</div>
+      <div class="mx-card-title">Actividad documentada</div>
+      <div class="mx-card-body">PEMEX realizó 900+ fracturamientos entre 2011 y 2018 en Burgos y Poza Rica. Clasificados como "convencionales" en reportes, pero académicos los identificaron como fracking.</div>
+      <span class="mx-card-num" style="color:var(--teal)">900+</span>
+    </div>
+    <div class="mx-card">
+      <div class="mx-card-label">Comunidades afectadas</div>
+      <div class="mx-card-title">Resistencia documentada</div>
+      <div class="mx-card-body">Comunidades nahuas, huastecas y tének en Veracruz y SLP han denunciado contaminación. CEMDA y CECOP documentaron afectación entre 2014 y 2019.</div>
+      <span class="mx-card-num" style="color:var(--purple)">12+</span>
+    </div>
+    <div class="mx-card">
+      <div class="mx-card-label">Compromisos climáticos</div>
+      <div class="mx-card-title">NDC incompatible</div>
+      <div class="mx-card-body">México se comprometió a reducir emisiones 35% al 2030. Según el INECC, expandir el fracking elevaría GEI entre 12 y 18%, haciendo inviable esa meta.</div>
+      <span class="mx-card-num" style="color:var(--green)">−35%</span>
+    </div>
+  </div>
+
+  <div class="leg-wrap reveal">
+    <div class="leg-title">Cronología legislativa en México</div>
+    <div class="leg-item">
+      <div class="leg-year">2013</div>
+      <div><span class="leg-tag tag-law">Reforma constitucional</span><div class="leg-ctitle">Apertura al fracking privado — Arts. 25, 27 y 28</div><div class="leg-cbody">La Reforma Energética de Peña Nieto y la Ley de Hidrocarburos (2014) permiten explícitamente la fracturación hidráulica. Marco diseñado para concesiones privadas nacionales e internacionales.</div></div>
+    </div>
+    <div class="leg-item">
+      <div class="leg-year">2015</div>
+      <div><span class="leg-tag tag-sci">UNAM</span><div class="leg-ctitle">Primer análisis técnico nacional</div><div class="leg-cbody">El Instituto de Ingeniería de la UNAM identifica 8 cuencas en riesgo hídrico y denuncia la ausencia de estudios de línea base ambiental en zonas de exploración.</div></div>
+    </div>
+    <div class="leg-item">
+      <div class="leg-year">2016</div>
+      <div><span class="leg-tag tag-debate">Senado</span><div class="leg-ctitle">Primeras iniciativas de prohibición</div><div class="leg-cbody">PRD y PT presentan iniciativas. Bloqueadas en comisiones por PRI. La sociedad civil organiza el Frente de Pueblos en Defensa del Agua y la Tierra.</div></div>
+    </div>
+    <div class="leg-item">
+      <div class="leg-year">2018</div>
+      <div><span class="leg-tag tag-active">AMLO</span><div class="leg-ctitle">Congelamiento sin decreto formal</div><div class="leg-cbody">AMLO declara oposición al fracking y frena concesiones privadas. PEMEX continúa operaciones heredadas. Sin decreto formal de prohibición. Ambigüedad legal persiste.</div></div>
+    </div>
+    <div class="leg-item">
+      <div class="leg-year">2020</div>
+      <div><span class="leg-tag tag-sci">INECC</span><div class="leg-ctitle">Fracking incompatible con los NDC mexicanos</div><div class="leg-cbody">El Instituto Nacional de Ecología y Cambio Climático publica que la expansión del fracking aumentaría GEI entre 12 y 18% para 2030. Informe sin respuesta oficial.</div></div>
+    </div>
+    <div class="leg-item">
+      <div class="leg-year">2021</div>
+      <div><span class="leg-tag tag-debate">SCJN</span><div class="leg-ctitle">Amparo colectivo — Coahuila</div><div class="leg-cbody">Comunidades de Múzquiz y Sabinas impugnan ante la SCJN argumentando violación al derecho humano al agua (Art. 4 constitucional). Sienta precedente de litigio estratégico ambiental.</div></div>
+    </div>
+    <div class="leg-item">
+      <div class="leg-year">2024</div>
+      <div><span class="leg-tag tag-active">Sheinbaum</span><div class="leg-ctitle">Revisión del marco — posición en construcción</div><div class="leg-cbody">La presidenta Claudia Sheinbaum (con formación en política climática e IPCC) señala intención de revisar el marco del fracking. Sin decreto. El debate interno enfrenta soberanía energética vs. transición ecológica. Presión activa de Greenpeace MX y CEMDA.</div></div>
+    </div>
+  </div>
+
+  <div class="basin-grid reveal">
+    <div class="basin-card">
+      <div class="basin-name">Cuenca Burgos</div>
+      <div class="basin-state">Coahuila · NL · Tamaulipas</div>
+      <div class="basin-body">Comparte Eagle Ford con Texas. Mayor actividad PEMEX. Acuífero Carrizo-Wilcox compartido con EE.UU. en estrés hídrico alto.</div>
+      <span class="basin-tcf">~343 Tcf</span>
+    </div>
+    <div class="basin-card">
+      <div class="basin-name">Sabinas-Burro</div>
+      <div class="basin-state">Coahuila</div>
+      <div class="basin-body">Cuenca carbonífera con potencial shale. Zona minera activa. Conflictos con comunidades de Múzquiz y el Río Sabinas.</div>
+      <span class="basin-tcf">~68 Tcf</span>
+    </div>
+    <div class="basin-card">
+      <div class="basin-name">Tampico-Misantla</div>
+      <div class="basin-state">Veracruz · SLP · Tamaulipas</div>
+      <div class="basin-body">Alta biodiversidad en la Huasteca. Comunidades nahuas y huastecas con derechos indígenas vigentes. Manantiales de agua termal en riesgo.</div>
+      <span class="basin-tcf">~50 Tcf</span>
+    </div>
+    <div class="basin-card">
+      <div class="basin-name">Veracruz</div>
+      <div class="basin-state">Veracruz</div>
+      <div class="basin-body">Mediano potencial según CNH. Colinda con Áreas Naturales Protegidas. Alta precipitación y biodiversidad elevan el riesgo ambiental.</div>
+      <span class="basin-tcf">~17 Tcf</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══ DATOS COMPARATIVOS ══ -->
+<section id="datos" class="section">
+  <div class="section-eyebrow reveal">04 — Comparativa global</div>
+  <h2 class="section-title reveal rd1">Intensidad de impactos</h2>
+  <p class="section-sub reveal rd2">Escala 0–100 basada en metaanálisis científicos. Pasa el cursor sobre cada barra para ver el dato concreto.</p>
+
+  <div class="chart-wrap reveal rd2" id="barWrap">
+    <div class="chart-title">Impacto ambiental por categoría</div>
+    <div class="chart-sub">Fuentes: EPA (2016), AIE (2022), IPCC AR6 (2022), USGS (2023)</div>
+
+    <div class="bar-row" data-tip="1,000+ casos documentados en PA, WY, OH, AR y cuenca Burgos MX · EPA (2016)">
+      <div class="bar-lbl">Contam. agua</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="--w:88%;background:linear-gradient(90deg,#4a9eff,#7ec3ff)">88</div>
+        <div class="bar-tip-label">88/100 · 1,000+ casos EE.UU.</div>
+      </div>
+    </div>
+    <div class="bar-row" data-tip="CH₄ con PCG 86× CO₂ a 20 años · IPCC AR6 (2022) · Alvarez et al. Science (2018)">
+      <div class="bar-lbl">Metano fugitivo</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="--w:82%;background:linear-gradient(90deg,#e8441a,#f57c5a)">82</div>
+        <div class="bar-tip-label">82/100 · 86× CO₂ equiv.</div>
+      </div>
+    </div>
+    <div class="bar-row" data-tip="7.5–30M litros/pozo · Norte MX en estrés hídrico severo · CNH+CONAGUA (2016)">
+      <div class="bar-lbl">Calidad del aire</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="--w:72%;background:linear-gradient(90deg,#ff6b6b,#ffaaaa)">72</div>
+        <div class="bar-tip-label">72/100 · Radio 5km NOx+COV</div>
+      </div>
+    </div>
+    <div class="bar-row" data-tip="7.5–30M litros/pozo; 50–70% permanece en subsuelo · EPA (2016)">
+      <div class="bar-lbl">Consumo hídrico</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="--w:76%;background:linear-gradient(90deg,#1ecfb4,#5de0d0)">76</div>
+        <div class="bar-tip-label">76/100 · 30M l/pozo máx.</div>
+      </div>
+    </div>
+    <div class="bar-row" data-tip="Oklahoma +900 sismos M≥3 en 2014; China M4.0+; Canadá M4.6 · USGS (2023)">
+      <div class="bar-lbl">Sismicidad</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="--w:70%;background:linear-gradient(90deg,#f5a623,#f7c06a)">70</div>
+        <div class="bar-tip-label">70/100 · hasta M4.6</div>
+      </div>
+    </div>
+    <div class="bar-row" data-tip="BTEX, NORM y metales en suelo; compactación por maquinaria 30+ años rec.">
+      <div class="bar-lbl">Degradación suelo</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="--w:60%;background:linear-gradient(90deg,#9b5cf6,#c490f9)">60</div>
+        <div class="bar-tip-label">60/100 · 30+ años rec.</div>
+      </div>
+    </div>
+    <div class="bar-row" data-tip="Carreteras, plataformas y tuberías fragmentan hábitats críticos · 4–16 ha/pozo">
+      <div class="bar-lbl">Fragmentación</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="--w:65%;background:linear-gradient(90deg,#e8441a,#f57c5a)">65</div>
+        <div class="bar-tip-label">65/100 · 4–16 ha/pozo</div>
+      </div>
+    </div>
+    <div class="bar-row" data-tip="Operaciones 24/7 con ruido y luz artificial alteran fauna nocturna y migratoria">
+      <div class="bar-lbl">Ruido y luz</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="--w:44%;background:linear-gradient(90deg,#6b728a,#9098b0)">44</div>
+        <div class="bar-tip-label">44/100 · fauna nocturna</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FUENTES ══ -->
+<section id="fuentes" class="section">
+  <div class="section-eyebrow reveal">05 — Fuentes y metodología</div>
+  <h2 class="section-title reveal rd1">Respaldo científico</h2>
+
+  <div class="sources-wrap reveal rd2">
+    <div class="sources-header">
+      <div class="chart-title">Metodología de investigación</div>
+    </div>
+    <div class="sources-method">
+      <div class="sources-method-title">Criterios de selección</div>
+      <div class="sources-method-body">
+        Este análisis integra <strong>literatura científica revisada por pares</strong>, informes de agencias reguladoras y organismos internacionales. Se priorizaron: (1) estudios con datos empíricos primarios de campo; (2) metaanálisis que sintetizan múltiples estudios primarios; (3) fuentes gubernamentales con acceso público (EPA, USGS, CNH, SENER); (4) estudios post-2015 salvo fundacionales del campo. Para México, se cruzaron fuentes académicas nacionales (UNAM, INECC) con organizaciones de sociedad civil verificables (CEMDA, Greenpeace MX).<br><br>
+        <strong>Limitaciones:</strong> La actividad de PEMEX opera parcialmente sin transparencia de datos. Los datos de sismicidad en México son menos robustos por menor densidad de la red sismológica nacional. Los datos de contaminación hídrica en cuencas mexicanas son preliminares.
+      </div>
+    </div>
+
+    <div class="source-group">
+      <div class="sg-label">Agencias gubernamentales e internacionales</div>
+      <ul class="source-list">
+        <li class="source-item"><div class="source-num">01</div><div><div class="source-title">Hydraulic Fracturing for Oil and Gas: Impacts from the Hydraulic Fracturing Water Cycle</div><div class="source-authors">U.S. Environmental Protection Agency (EPA)<span class="source-year">2016</span></div><a href="https://www.epa.gov/hfstudy" target="_blank" rel="noopener" class="source-link">epa.gov/hfstudy</a></div></li>
+        <li class="source-item"><div class="source-num">02</div><div><div class="source-title">Induced Seismicity from Oil and Gas Operations</div><div class="source-authors">U.S. Geological Survey (USGS)<span class="source-year">2015–2023</span></div><a href="https://www.usgs.gov/programs/earthquake-hazards/induced-earthquakes" target="_blank" rel="noopener" class="source-link">usgs.gov/programs/earthquake-hazards/induced-earthquakes</a></div></li>
+        <li class="source-item"><div class="source-num">03</div><div><div class="source-title">World Energy Outlook 2022</div><div class="source-authors">International Energy Agency (IEA / AIE)<span class="source-year">2022</span></div><a href="https://www.iea.org/reports/world-energy-outlook-2022" target="_blank" rel="noopener" class="source-link">iea.org/reports/world-energy-outlook-2022</a></div></li>
+        <li class="source-item"><div class="source-num">04</div><div><div class="source-title">IPCC Sixth Assessment Report (AR6) — Mitigation of Climate Change</div><div class="source-authors">IPCC Working Group III<span class="source-year">2022</span></div><a href="https://www.ipcc.ch/report/ar6/wg3/" target="_blank" rel="noopener" class="source-link">ipcc.ch/report/ar6/wg3/</a></div></li>
+        <li class="source-item"><div class="source-num">05</div><div><div class="source-title">Technically Recoverable Shale Resources — 41 Countries</div><div class="source-authors">U.S. Energy Information Administration (EIA)<span class="source-year">2013</span></div><a href="https://www.eia.gov/analysis/studies/worldshalegas/" target="_blank" rel="noopener" class="source-link">eia.gov/analysis/studies/worldshalegas/</a></div></li>
+      </ul>
+    </div>
+
+    <div class="source-group">
+      <div class="sg-label">Investigación científica revisada por pares</div>
+      <ul class="source-list">
+        <li class="source-item"><div class="source-num">06</div><div><div class="source-title">Methane emissions from the U.S. oil and gas supply chain</div><div class="source-authors">Alvarez, R.A. et al. — Science, Vol. 361<span class="source-year">2018</span></div><a href="https://www.science.org/doi/10.1126/science.aar7204" target="_blank" rel="noopener" class="source-link">science.org/doi/10.1126/science.aar7204</a></div></li>
+        <li class="source-item"><div class="source-num">07</div><div><div class="source-title">Greenhouse gas footprint of natural gas from shale formations</div><div class="source-authors">Howarth, Santoro, Ingraffea — Climatic Change<span class="source-year">2011</span></div><a href="https://link.springer.com/article/10.1007/s10584-011-0061-5" target="_blank" rel="noopener" class="source-link">link.springer.com/article/10.1007/s10584-011-0061-5</a></div></li>
+        <li class="source-item"><div class="source-num">08</div><div><div class="source-title">Injection-induced seismicity: A review of current knowledge</div><div class="source-authors">Kim W.Y. — Annual Review of Earth and Planetary Sciences<span class="source-year">2018</span></div><a href="https://www.annualreviews.org/doi/10.1146/annurev-earth-060115-012527" target="_blank" rel="noopener" class="source-link">annualreviews.org/doi/10.1146/annurev-earth-060115-012527</a></div></li>
+        <li class="source-item"><div class="source-num">09</div><div><div class="source-title">Systematic review of impacts of hydraulic fracturing on groundwater</div><div class="source-authors">Vengosh et al. — Environmental Science & Technology<span class="source-year">2014</span></div><a href="https://pubs.acs.org/doi/10.1021/es405118y" target="_blank" rel="noopener" class="source-link">pubs.acs.org/doi/10.1021/es405118y</a></div></li>
+      </ul>
+    </div>
+
+    <div class="source-group">
+      <div class="sg-label">Fuentes específicas sobre México</div>
+      <ul class="source-list">
+        <li class="source-item"><div class="source-num">10</div><div><div class="source-title">Fracking en México: análisis de riesgos ambientales y sociales</div><div class="source-authors">Centro Mexicano de Derecho Ambiental (CEMDA)<span class="source-year">2020</span></div><a href="https://www.cemda.org.mx/fracking/" target="_blank" rel="noopener" class="source-link">cemda.org.mx/fracking/</a></div></li>
+        <li class="source-item"><div class="source-num">11</div><div><div class="source-title">Evaluación del potencial de recursos de lutitas en México</div><div class="source-authors">Comisión Nacional de Hidrocarburos (CNH)<span class="source-year">2015</span></div><a href="https://www.gob.mx/cnh" target="_blank" rel="noopener" class="source-link">gob.mx/cnh</a></div></li>
+        <li class="source-item"><div class="source-num">12</div><div><div class="source-title">Fracking, agua y cambio climático en México</div><div class="source-authors">Greenpeace México<span class="source-year">2021</span></div><a href="https://www.greenpeace.org/mexico/publicacion/6369/" target="_blank" rel="noopener" class="source-link">greenpeace.org/mexico/publicacion/6369/</a></div></li>
+        <li class="source-item"><div class="source-num">13</div><div><div class="source-title">Potencial gas de lutitas y compatibilidad con NDC</div><div class="source-authors">Instituto Nacional de Ecología y Cambio Climático (INECC)<span class="source-year">2020</span></div><a href="https://www.gob.mx/inecc" target="_blank" rel="noopener" class="source-link">gob.mx/inecc</a></div></li>
+        <li class="source-item"><div class="source-num">14</div><div><div class="source-title">Fracking restrictions around the world — comparative law analysis</div><div class="source-authors">Law Library of Congress<span class="source-year">2023</span></div><a href="https://www.loc.gov/law/help/hydraulic-fracturing/" target="_blank" rel="noopener" class="source-link">loc.gov/law/help/hydraulic-fracturing/</a></div></li>
+      </ul>
+    </div>
+
+    <div class="source-group">
+      <div class="sg-label">Nota sobre verificación y actualización</div>
+      <div class="sources-method-body">Todos los vínculos verificados en abril 2024. Para fuentes con DOI permanente, usar <a href="https://doi.org" target="_blank" rel="noopener">doi.org</a>. Para páginas institucionales migradas, buscar en <a href="https://archive.org" target="_blank" rel="noopener">archive.org</a>. La hoja de cálculo descargable (fracking-data.xlsx) contiene la tabla completa de fuentes con URLs y años de publicación.</div>
+    </div>
+  </div>
+
+  <div class="callout reveal">
+    <div class="callout-body"><strong>Perspectiva de síntesis:</strong> La evidencia acumulada desde 2010 muestra un patrón consistente: el fracking produce impactos ambientales medibles en agua, aire, suelo y sismicidad. El debate ya no es <em>si</em> hay impactos, sino si son manejables y bajo qué condiciones. Los países con mejores resultados ambientales implementaron evaluaciones de línea base antes de autorizar operaciones —algo que México no ha hecho sistemáticamente.</div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">FRACKING</div>
+  <div class="footer-lab">By Vanguardia IA Lab</div>
+  <div class="footer-meta">Análisis de impacto ambiental global · 2024 · Fuentes científicas verificadas</div>
+  <div style="margin-top:20px">
+    <button onclick="openShare()" style="background:rgba(232,68,26,.12);border:1px solid rgba(232,68,26,.3);color:var(--accent);padding:10px 24px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;cursor:pointer;transition:background .2s">↑ COMPARTIR ESTE ANÁLISIS</button>
+  </div>
+</footer>
+
+<!-- ══ SCRIPTS ══ -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+// ══════════════════════════════════════
+// DATA
+// ══════════════════════════════════════
+const COUNTRIES = [
+  {flag:"🇺🇸",name:"Estados Unidos",iso:"US",region:"americas",status:"activo",statusLabel:"Activo y dominante",body:"Produce más del <strong>65%</strong> del gas y shale oil global. Texas, Pensilvania y Dakota del Norte concentran operaciones. La EPA documentó contaminación de acuíferos en múltiples estados. Oklahoma registró 900+ sismos M≥3 en 2014. La regulación varía radicalmente por estado.",num:"17,000+",unit:"POZOS/AÑO (PICO 2014)",numColor:"var(--blue)"},
+  {flag:"🇫🇷",name:"Francia",iso:"FR",region:"europa",status:"ban",statusLabel:"Prohibición total",body:"Primera gran economía en prohibir el fracking por ley (2011). El Tribunal Constitucional confirmó la prohibición en 2013. Tiene grandes reservas en la cuenca parisina sin explotar. Modelo regulatorio citado internacionalmente.",num:"2011",unit:"AÑO DE PROHIBICIÓN",numColor:"var(--accent)"},
+  {flag:"🇨🇳",name:"China",iso:"CN",region:"asia",status:"activo",statusLabel:"Activo — expansión",body:"Segundo mayor productor de gas de esquisto. Sichuan-Chongqing concentra 31.6 Tcf. Sismos M4.0+ desde 2019. Meta de triplicar producción para 2030. Regulación ambiental fragmentaria a nivel provincial.",num:"31.6 Tcf",unit:"RESERVAS SICHUAN",numColor:"var(--blue)"},
+  {flag:"🇦🇷",name:"Argentina",iso:"AR",region:"americas",status:"activo",statusLabel:"Activo — Vaca Muerta",body:"Vaca Muerta (Neuquén) es la 2ª formación de shale más grande del mundo. Desde 2012 opera con inversión extranjera. Pueblos mapuche han denunciado afectación hídrica y contaminación de tierras.",num:"308 Tcf",unit:"GAS SHALE ESTIMADO",numColor:"var(--blue)"},
+  {flag:"🇩🇪",name:"Alemania",iso:"DE",region:"europa",status:"mora",statusLabel:"Moratoria indefinida",body:"Moratoria desde 2017 bajo la Ley Federal de Aguas. Solo pruebas científicas bajo estrictos controles. El gobierno evalúa extender la prohibición permanentemente. Referente europeo junto a Francia.",num:"2017",unit:"AÑO DE MORATORIA",numColor:"var(--amber)"},
+  {flag:"🇬🇧",name:"Reino Unido",iso:"GB",region:"europa",status:"mora",statusLabel:"Moratoria 2019",body:"4 años de operaciones en Lancashire provocaron sismos de M2.9. En 2019 el gobierno impuso moratoria. El gobierno Truss intentó revertirla en 2022, con rechazo masivo. Moratoria se mantiene vigente.",num:"M2.9",unit:"SISMO QUE PROVOCÓ BAN",numColor:"var(--amber)"},
+  {flag:"🇨🇦",name:"Canadá",iso:"CA",region:"americas",status:"activo",statusLabel:"Activo regional",body:"Alberta y BC concentran la actividad. Québec tiene moratoria. BC Oil and Gas Commission confirmó sismicidad inducida hasta M4.6. Comunidades First Nations han litigado contra varios proyectos.",num:"M4.6",unit:"MAYOR SISMO INDUCIDO BC",numColor:"var(--blue)"},
+  {flag:"🇨🇴",name:"Colombia",iso:"CO",region:"americas",status:"debate",statusLabel:"En debate legal",body:"El Consejo de Estado suspendió el fracking piloto en 2019. En 2023, el gobierno Petro impulsó una prohibición constitucional en trámite. Reservas en los Llanos Orientales y el Magdalena Medio.",num:"2023",unit:"PROYECTO PROHIBICIÓN",numColor:"var(--teal)"},
+  {flag:"🇳🇱",name:"Países Bajos",iso:"NL",region:"europa",status:"mora",statusLabel:"Moratoria — Groningen",body:"Referente mundial en sismicidad inducida. Los sismos en Groningen (M3.6 en 2012) dañaron miles de edificios. La extracción convencional se cerró completamente en 2023. El fracking nunca escaló comercialmente.",num:"2023",unit:"CIERRE GAS GRONINGEN",numColor:"var(--amber)"},
+  {flag:"🇧🇬",name:"Bulgaria",iso:"BG",region:"europa",status:"ban",statusLabel:"Prohibición total",body:"Parlamento búlgaro aprobó prohibición en 2012. Referente junto a Francia en Europa. Sin reservas significativas identificadas.",num:"2012",unit:"AÑO PROHIBICIÓN",numColor:"var(--accent)"},
+  {flag:"🇮🇪",name:"Irlanda",iso:"IE",region:"europa",status:"ban",statusLabel:"Prohibición por ley",body:"Prohibición legislativa desde 2017 (Minerals Development Act). Primera prohibición constitucional del mundo, precedida de consultas públicas masivas contra el fracking.",num:"2017",unit:"AÑO PROHIBICIÓN",numColor:"var(--accent)"},
+  {flag:"🇦🇺",name:"Australia",iso:"AU",region:"oceania",status:"debate",statusLabel:"Mixto por estado",body:"Queensland activo con operaciones. Victoria prohibió el fracking. NSW y otras en debate. Gran Barrera de Coral en riesgo por proyectos offshore adyacentes.",num:"2021",unit:"AÑO PROHIBICIÓN VICTORIA",numColor:"var(--teal)"},
+  {flag:"🇿🇦",name:"Sudáfrica",iso:"ZA",region:"africa",status:"debate",statusLabel:"Debate Karoo Basin",body:"La cuenca Karoo tiene alto potencial identificado. Debate entre necesidad energética crítica y riesgos ambientales en una de las zonas más áridas del continente.",num:"485 Tcf",unit:"RESERVAS ESTIMADAS",numColor:"var(--teal)"},
+  {flag:"🇩🇿",name:"Argelia",iso:"DZ",region:"africa",status:"debate",statusLabel:"Debate con resistencia",body:"Protestas masivas bloquearon operaciones exploratorias en 2015. El gobierno evalúa con cautela por dependencia energética. Reservas saharanas significativas identificadas.",num:"707 Tcf",unit:"RESERVAS ESTIMADAS",numColor:"var(--teal)"},
+  {flag:"🇺🇾",name:"Uruguay",iso:"UY",region:"americas",status:"mora",statusLabel:"Moratoria",body:"Parlamento uruguayo aprobó moratoria en 2017. Sin operaciones comerciales hasta resolución del debate ambiental y social.",num:"2017",unit:"AÑO MORATORIA",numColor:"var(--amber)"},
+  {flag:"🇷🇺",name:"Rusia",iso:"RU",region:"asia",status:"none",statusLabel:"Sin regulación clara",body:"Vastas reservas en la formación Bazhenov (estimadas en 1,000+ Tcf). Sin desarrollo comercial a escala por costos elevados y sanciones. Marco regulatorio inexistente.",num:"1,000+",unit:"TCF BAZHENOV",numColor:"var(--muted)"},
+  {flag:"🇧🇷",name:"Brasil",iso:"BR",region:"americas",status:"debate",statusLabel:"Debate regulatorio",body:"La ANP analiza regulación. Reservas en cuencas Paraná y Solimões. Debate entre transición energética y necesidad de seguridad energética.",num:"245 Tcf",unit:"RESERVAS ESTIMADAS",numColor:"var(--teal)"},
+  {flag:"🇵🇱",name:"Polonia",iso:"PL",region:"europa",status:"debate",statusLabel:"Exploración pausada",body:"Expectativas altas de reservas no se confirmaron en exploración. Empresas retiraron licencias. Debate entre independencia energética de Rusia y riesgos ambientales.",num:"None",unit:"RESERVAS NO CONFIRMADAS",numColor:"var(--teal)"},
+];
+
+const STATUS_CLASS = {activo:"s-active",ban:"s-ban",mora:"s-mora",debate:"s-debate",none:"s-none"};
+const STATUS_MAP_COLOR = {activo:"#4a9eff",ban:"#e8441a",mora:"#f5a623",debate:"#1ecfb4",none:"#6b728a"};
+
+// ══════════════════════════════════════
+// NAV + PROGRESS
+// ══════════════════════════════════════
+const navEl = document.getElementById('nav');
+const progressEl = document.getElementById('progress');
+let lastScroll = 0;
+
+window.addEventListener('scroll', () => {
+  const s = window.scrollY;
+  const pct = (s / (document.body.scrollHeight - window.innerHeight)) * 100;
+  progressEl.style.width = pct + '%';
+  navEl.classList.toggle('hidden', s > lastScroll && s > 200);
+  lastScroll = s;
+});
+
+// ══════════════════════════════════════
+// REVEAL ON SCROLL
+// ══════════════════════════════════════
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); revealObs.unobserve(e.target); } });
+}, {threshold: 0.07});
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+// ══════════════════════════════════════
+// BAR CHART ANIMATE
+// ══════════════════════════════════════
+const barObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      e.target.style.width = e.target.style.getPropertyValue('--w');
+      barObs.unobserve(e.target);
+    }
+  });
+}, {threshold: 0.2});
+document.querySelectorAll('.bar-fill').forEach(b => barObs.observe(b));
+
+// ══════════════════════════════════════
+// TOOLTIP (desktop)
+// ══════════════════════════════════════
+const tooltipEl = document.getElementById('tooltip');
+document.querySelectorAll('.bar-row[data-tip]').forEach(row => {
+  row.addEventListener('mouseenter', () => { tooltipEl.textContent = row.dataset.tip; tooltipEl.style.opacity = '1'; });
+  row.addEventListener('mousemove', e => { tooltipEl.style.left=(e.clientX+14)+'px'; tooltipEl.style.top=(e.clientY-8)+'px'; });
+  row.addEventListener('mouseleave', () => { tooltipEl.style.opacity='0'; });
+});
+
+// ══════════════════════════════════════
+// DIAGRAM FRACTURE ANIMATION
+// ══════════════════════════════════════
+const fracLines = document.querySelectorAll('.frac');
+fracLines.forEach((l, i) => {
+  try {
+    const len = l.getTotalLength ? l.getTotalLength() : 60;
+    l.style.strokeDasharray = len;
+    l.style.strokeDashoffset = len;
+    l.style.transition = `stroke-dashoffset 0.9s ${i * 0.12}s ease-out`;
+  } catch(e){}
+});
+const diagObs = new IntersectionObserver(entries => {
+  if(entries[0].isIntersecting){
+    fracLines.forEach(l => { l.style.strokeDashoffset = '0'; });
+    diagObs.disconnect();
+  }
+},{threshold: 0.3});
+const diagEl = document.getElementById('diagSvg');
+if(diagEl) diagObs.observe(diagEl);
+
+// Gas particles
+const gasG = document.getElementById('gasG');
+let particleRunning = false;
+function startParticles() {
+  if(particleRunning || !gasG) return;
+  particleRunning = true;
+  setInterval(() => {
+    const x = 440 + Math.random() * 8;
+    const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx', x); c.setAttribute('cy', 360);
+    c.setAttribute('r', 2 + Math.random() * 2);
+    c.setAttribute('fill', 'rgba(30,207,180,0.65)');
+    c.style.animation = `none`;
+    c.style.transition = 'transform 3s ease-in, opacity 3s ease-in';
+    gasG.appendChild(c);
+    requestAnimationFrame(() => {
+      c.style.transform = `translateY(-${200 + Math.random()*80}px)`;
+      c.style.opacity = '0';
+    });
+    setTimeout(() => c.remove(), 3200);
+  }, 700);
+}
+const particleObs = new IntersectionObserver(entries => {
+  if(entries[0].isIntersecting) startParticles();
+},{threshold:0.4});
+if(diagEl) particleObs.observe(diagEl);
+
+// ══════════════════════════════════════
+// SEISMIC CANVAS
+// ══════════════════════════════════════
+const seismicData = [12,15,10,18,14,16,20,22,25,35,80,180,350,580,900,860,620,310,90,62,45,55,40];
+const seismicYears = Array.from({length:23},(_,i)=>2000+i);
+const canvas = document.getElementById('seismic');
+let seismicStarted = false;
+
+function resizeCanvas() {
+  if(!canvas) return;
+  const wrap = canvas.parentElement;
+  canvas.width = wrap.offsetWidth * (window.devicePixelRatio || 1);
+  canvas.height = wrap.offsetHeight * (window.devicePixelRatio || 1);
+  canvas.style.width = wrap.offsetWidth + 'px';
+  canvas.style.height = wrap.offsetHeight + 'px';
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+function drawSeismic(progress, ctx, w, h) {
+  ctx.clearRect(0,0,w,h);
+  const dpr = window.devicePixelRatio || 1;
+  const maxV = 900, padL=10*dpr, padR=10*dpr, padT=24*dpr, padB=28*dpr;
+  const cW = w-padL-padR, cH = h-padT-padB;
+  const bW = Math.max(2, cW/seismicData.length - 3*dpr);
+
+  // grid
+  ctx.strokeStyle = 'rgba(37,42,56,0.6)'; ctx.lineWidth=dpr;
+  [0,.25,.5,.75,1].forEach(t => {
+    const y = padT + cH*(1-t);
+    ctx.beginPath(); ctx.moveTo(padL,y); ctx.lineTo(w-padR,y); ctx.stroke();
+  });
+
+  seismicData.forEach((val, i) => {
+    const frac = Math.min(Math.max(progress * seismicData.length - i, 0), 1);
+    const bh = cH*(val/maxV)*frac;
+    const x = padL + i*(cW/seismicData.length);
+    const y = padT+cH-bh;
+    const color = val>=500?'#e8441a':val>=100?'#f5a623':val>=50?'#4a9eff':'#2a4060';
+    if(val>400){ ctx.shadowColor=color; ctx.shadowBlur=10*dpr; } else { ctx.shadowBlur=0; }
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    if(ctx.roundRect) ctx.roundRect(x+1,y,bW,bh,[3*dpr,3*dpr,0,0]);
+    else { ctx.rect(x+1,y,bW,bh); }
+    ctx.fill();
+    ctx.shadowBlur=0;
+    if(i%4===0){
+      ctx.fillStyle='rgba(107,114,138,0.7)';
+      ctx.font=`${9*dpr}px JetBrains Mono,monospace`;
+      ctx.textAlign='center';
+      ctx.fillText(seismicYears[i], x+bW/2, h-6*dpr);
+    }
+  });
+
+  if(progress>0.85){
+    const pi=14; const px=padL+pi*(cW/seismicData.length)+bW/2;
+    ctx.fillStyle='rgba(232,68,26,.9)';
+    ctx.font=`bold ${10*(window.devicePixelRatio||1)}px Syne,sans-serif`;
+    ctx.textAlign='center';
+    ctx.fillText('PICO 2014 · 900+', px, padT-6*(window.devicePixelRatio||1));
+  }
+}
+
+function animateSeismic() {
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let p = 0;
+  const step = () => {
+    p += 0.022;
+    drawSeismic(Math.min(p,1), ctx, canvas.width, canvas.height);
+    if(p < 1) requestAnimationFrame(step);
+  };
+  step();
+}
+
+const seismicObs = new IntersectionObserver(entries => {
+  if(entries[0].isIntersecting && !seismicStarted){ seismicStarted=true; animateSeismic(); }
+},{threshold:0.25});
+if(canvas) seismicObs.observe(canvas.parentElement);
+
+// ══════════════════════════════════════
+// COUNTRY CARDS
+// ══════════════════════════════════════
+function renderCards(filter='all') {
+  const grid = document.getElementById('countryGrid');
+  if(!grid) return;
+  grid.innerHTML = '';
+  const filtered = COUNTRIES.filter(c => {
+    if(filter==='all') return true;
+    if(filter==='activo') return c.status==='activo';
+    if(filter==='ban') return c.status==='ban';
+    if(filter==='mora') return c.status==='mora';
+    if(filter==='debate') return c.status==='debate';
+    if(filter==='americas') return c.region==='americas';
+    if(filter==='europa') return c.region==='europa';
+    return true;
+  });
+  filtered.forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'country-card';
+    div.dataset.region = c.region;
+    div.innerHTML = `
+      <span class="cc-flag">${c.flag}</span>
+      <div class="cc-name">${c.name}</div>
+      <span class="cc-status-pill ${STATUS_CLASS[c.status]}">${c.statusLabel}</span>
+      <div class="cc-body">${c.body}</div>
+      <span class="cc-num" style="color:${c.numColor}">${c.num}</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;display:block;margin-top:2px">${c.unit}</span>`;
+    grid.appendChild(div);
+  });
+}
+renderCards('all');
+
+document.getElementById('catTabs').addEventListener('click', e => {
+  const tab = e.target.closest('.cat-tab');
+  if(!tab) return;
+  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  const filter = tab.dataset.cat;
+  renderCards(filter);
+  filterMap(filter);   // ← sync map with selected category
+  // Animate new cards in
+  document.querySelectorAll('#countryGrid .country-card').forEach((el, i) => {
+    el.style.opacity='0'; el.style.transform='translateY(16px)';
+    el.style.transition=`opacity .35s ${i*0.04}s, transform .35s ${i*0.04}s`;
+    setTimeout(() => { el.style.opacity='1'; el.style.transform='translateY(0)'; }, 20);
+  });
+});
+
+// ══════════════════════════════════════
+// LEAFLET MAP + PULSE PINS
+// ══════════════════════════════════════
+let mapGeoLayer = null;
+let pinMarkers  = [];
+let mapReady    = false;
+
+// Inject pulse-pin CSS once
+(function(){
+  const s = document.createElement('style');
+  s.textContent = `
+    .dark-popup .leaflet-popup-content-wrapper{background:#13161f;border:1px solid #252a38;border-radius:6px;color:#c8cdd8;box-shadow:0 8px 32px rgba(0,0,0,.6)}
+    .dark-popup .leaflet-popup-content{margin:14px 16px}
+    .dark-popup .leaflet-popup-tip-container{display:none}
+    .dark-popup .leaflet-popup-close-button{color:#6b728a!important;font-size:18px!important;right:10px!important;top:8px!important}
+    .leaflet-bar a{background:#13161f!important;color:#c8cdd8!important;border-bottom:1px solid #252a38!important}
+    .leaflet-bar a:hover{background:#1e2230!important}
+    .pulse-wrap{position:relative;display:flex;align-items:center;justify-content:center}
+    .pulse-dot{border-radius:50%;cursor:pointer;position:relative;z-index:1}
+    .pulse-ring{
+      position:absolute;top:50%;left:50%;
+      width:100%;height:100%;border-radius:50%;
+      border:2px solid var(--rc,#e8441a);
+      transform:translate(-50%,-50%) scale(1);
+      animation:pring 2s ease-out infinite;
+      pointer-events:none;
+    }
+    .pulse-ring.r2{animation-delay:.7s}
+    @keyframes pring{
+      0%  {transform:translate(-50%,-50%) scale(1);  opacity:.9}
+      100%{transform:translate(-50%,-50%) scale(3.8);opacity:0}
+    }
+    .pin-dimmed .pulse-dot{opacity:.12!important;box-shadow:none!important}
+    .pin-dimmed .pulse-ring{animation:none!important;opacity:0!important}
+  `;
+  document.head.appendChild(s);
+})();
+
+const CENTROIDS = {
+  US:[37,-96],CA:[56,-106],MX:[23,-102],
+  FR:[46,2],DE:[51,10],GB:[54,-2],NL:[52,5],BG:[42,25],PL:[52,20],IE:[53,-8],
+  AR:[-34,-64],BR:[-10,-55],CO:[4,-74],UY:[-33,-56],
+  CN:[35,105],AU:[-25,134],ZA:[-29,25],DZ:[28,3],RU:[61,105],
+};
+
+function matchesFilter(country, filter) {
+  if(filter==='all')     return true;
+  if(filter==='activo')  return country.status==='activo';
+  if(filter==='ban')     return country.status==='ban';
+  if(filter==='mora')    return country.status==='mora';
+  if(filter==='debate')  return country.status==='debate';
+  if(filter==='americas')return country.region==='americas';
+  if(filter==='europa')  return country.region==='europa';
+  return true;
+}
+
+function filterMap(filter) {
+  if(!mapReady) return;
+  // Polygons
+  if(mapGeoLayer) {
+    mapGeoLayer.eachLayer(layer => {
+      const iso = layer.feature?.properties?.ISO_A2;
+      const country = COUNTRIES.find(c => c.iso===iso);
+      if(!country) return;
+      const active = matchesFilter(country, filter);
+      layer.setStyle({
+        fillColor:   active ? STATUS_MAP_COLOR[country.status] : '#1a1f2a',
+        fillOpacity: active ? 0.70 : 0.06,
+        weight:      active ? 1.5  : 0.3,
+        color:       active ? '#3a3f50' : '#12141a',
+      });
+    });
+  }
+  // Pins
+  pinMarkers.forEach(({marker, country}) => {
+    const active = matchesFilter(country, filter);
+    const el = marker.getElement();
+    if(!el) return;
+    const wrap = el.querySelector('.pulse-wrap');
+    if(!wrap) return;
+    if(active) wrap.classList.remove('pin-dimmed');
+    else       wrap.classList.add('pin-dimmed');
+  });
+}
+
+function makePopupHTML(d) {
+  const body = d.body
+    .replace(/<strong[^>]*>/g,'<strong style="color:#fff">')
+    .replace(/<em>/g,'<em style="color:#f5a623">');
+  return `<div style="font-family:Syne,sans-serif;min-width:210px">
+    <div style="font-size:22px;margin-bottom:8px">${d.flag}
+      <strong style="color:#eef0f6;font-size:15px;font-family:Bebas Neue,sans-serif;letter-spacing:1px"> ${d.name}</strong>
+    </div>
+    <div style="background:rgba(255,255,255,.07);padding:3px 9px;border-radius:2px;display:inline-block;
+                margin-bottom:10px;font-family:JetBrains Mono,monospace;font-size:9px;letter-spacing:2px;
+                color:${STATUS_MAP_COLOR[d.status]};border:1px solid ${STATUS_MAP_COLOR[d.status]}44">
+      ${d.statusLabel}
+    </div>
+    <div style="font-size:12px;color:#c8cdd8;line-height:1.65">${body}</div>
+    <div style="margin-top:12px;font-family:Bebas Neue,sans-serif;font-size:30px;color:${d.numColor};line-height:1">${d.num}</div>
+    <div style="font-family:JetBrains Mono,monospace;font-size:9px;color:#6b728a;letter-spacing:1px;margin-top:2px">${d.unit}</div>
+  </div>`;
+}
+
+function addPins(map) {
+  COUNTRIES.forEach(country => {
+    const pos = CENTROIDS[country.iso];
+    if(!pos) return;
+    const color = STATUS_MAP_COLOR[country.status];
+    const isLarge = ['US','RU','CN','CA','AR','AU'].includes(country.iso);
+    const sz = isLarge ? 16 : 12;
+    const html = `<div class="pulse-wrap" style="width:${sz+16}px;height:${sz+16}px">
+      <div class="pulse-dot" style="width:${sz}px;height:${sz}px;background:${color};
+           border:2px solid rgba(255,255,255,.25);box-shadow:0 0 10px ${color}88;
+           border-radius:50%"></div>
+      <div class="pulse-ring" style="--rc:${color};width:${sz}px;height:${sz}px"></div>
+      <div class="pulse-ring r2" style="--rc:${color};width:${sz}px;height:${sz}px"></div>
+    </div>`;
+    const icon = L.divIcon({
+      html, className:'', iconSize:[sz+16,sz+16], iconAnchor:[(sz+16)/2,(sz+16)/2],
+      popupAnchor:[0,-sz/2-4],
+    });
+    const marker = L.marker(pos,{icon,zIndexOffset:500})
+      .bindPopup(makePopupHTML(country),{className:'dark-popup',maxWidth:300,minWidth:220})
+      .addTo(map);
+    pinMarkers.push({marker,country});
+  });
+}
+
+function initMap() {
+  const mapEl = document.getElementById('leafletMap');
+  if(typeof L==='undefined'){
+    mapEl.innerHTML='<div style="padding:40px;text-align:center;color:var(--muted);font-family:JetBrains Mono,monospace;font-size:12px">Mapa requiere conexión a internet.</div>';
+    return;
+  }
+  const map = L.map('leafletMap',{center:[20,10],zoom:2,minZoom:1,maxZoom:6});
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains:'abcd',maxZoom:20,
+  }).addTo(map);
+
+  const isoToData={};
+  COUNTRIES.forEach(c=>{isoToData[c.iso]=c;});
+
+  fetch('https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson')
+    .then(r=>r.json())
+    .then(geojson=>{
+      mapGeoLayer=L.geoJSON(geojson,{
+        filter:f=>!!isoToData[f.properties.ISO_A2],
+        style:f=>{
+          const d=isoToData[f.properties.ISO_A2];
+          const c=d?STATUS_MAP_COLOR[d.status]:'#6b728a';
+          return{fillColor:c,weight:1.5,opacity:.8,color:'#3a3f50',fillOpacity:.70};
+        },
+        onEachFeature:(f,layer)=>{
+          const d=isoToData[f.properties.ISO_A2];
+          if(!d) return;
+          layer.on('click',()=>{
+            const pm=pinMarkers.find(p=>p.country.iso===d.iso);
+            if(pm) pm.marker.openPopup();
+          });
+          layer.on('mouseover',function(){
+            if(parseFloat(this.options.fillOpacity)>0.1)
+              this.setStyle({fillOpacity:.9,weight:2.5});
+          });
+          layer.on('mouseout',function(){
+            if(parseFloat(this.options.fillOpacity)>0.1)
+              this.setStyle({fillOpacity:.70,weight:1.5});
+          });
+        }
+      }).addTo(map);
+      addPins(map);
+      mapReady=true;
+    })
+    .catch(()=>{addPins(map);mapReady=true;});
+}
+initMap();
+
+// ══════════════════════════════════════
+// SHARE
+// ══════════════════════════════════════
+function openShare() {
+  const url = window.location.href;
+  const title = 'Fracking — Impacto Ambiental Global | Vanguardia IA Lab';
+  const text = 'Análisis visual del impacto ambiental del fracking: agua, suelo, clima, sismicidad. México en detalle.';
+  document.getElementById('shareUrl').value = url;
+  document.getElementById('shareTwitter').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title+' '+text)}&url=${encodeURIComponent(url)}`;
+  document.getElementById('shareFB').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+  document.getElementById('shareWA').href = `https://wa.me/?text=${encodeURIComponent(title+' '+url)}`;
+  document.getElementById('shareTG').href = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`;
+  document.getElementById('shareModal').classList.add('open');
+}
+function copyUrl() {
+  const input = document.getElementById('shareUrl');
+  input.select(); input.setSelectionRange(0,99999);
+  try { navigator.clipboard.writeText(input.value); } catch(e){ document.execCommand('copy'); }
+  const btn = document.querySelector('.copy-btn');
+  btn.textContent='✓ COPIADO'; setTimeout(()=>btn.textContent='COPIAR', 2000);
+}
+document.getElementById('shareModal').addEventListener('click', e => {
+  if(e.target===e.currentTarget) e.currentTarget.classList.remove('open');
+});
+// Native share if available
+if(navigator.share){
+  document.querySelectorAll('.nav-share,.modal-title').forEach(el=>{
+    if(el.classList.contains('nav-share')) el.addEventListener('click', async ()=>{
+      try{ await navigator.share({title:'Fracking — Vanguardia IA Lab',text:'Análisis ambiental del fracking',url:window.location.href}); }
+      catch(e){ openShare(); }
+    });
+  });
+}
+
+// close on ESC
+document.addEventListener('keydown', e=>{if(e.key==='Escape') document.getElementById('shareModal').classList.remove('open');});
+</script>
+</body>
+</html>
